@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:focused_menu/modals.dart';
 
 var colors = creatingColors();
 
@@ -40,15 +41,28 @@ class _UserProfileState extends State<UserProfile> {
                 child: Opacity(
                   opacity: 0.4,
                   //opening change photo/show photo menu
-                  child: FocusedMenuHolder(
-                    openWithTap: true,
-                    //NOT DONE YET !!!!
-                    onPressed: (){},
-                    blurBackgroundColor: colors[1],
-                    child: CircleAvatar(
-                      radius: 50,
-                      //ADD A PHOTO HERE!!
-                      backgroundColor: colors[1],
+                  child: Center(
+                    child: FocusedMenuHolder(
+                      menuWidth:  MediaQuery.of(context).size.width*0.5,
+
+                      openWithTap: true,
+                      //NOT DONE YET !!!!
+                      menuItems: [
+                        FocusedMenuItem(title: Text('View profile picture'),
+                            trailingIcon: Icon(Icons.face,color: colors[2],),
+                            ),
+                        FocusedMenuItem(title: Text('Change profile picture'),
+                          trailingIcon: Icon(Icons.image,color: colors[2],),
+                        ),
+                      ],
+                      onPressed: (){},
+                      blurBackgroundColor: colors[2],
+                      child: CircleAvatar(
+                        radius: 40,
+                        //ADD A PHOTO HERE!!
+                        backgroundImage: AssetImage('images/user.png'),
+                        backgroundColor: Colors.transparent,
+                      ),
                     ),
                   ),
                 ),
