@@ -51,15 +51,54 @@ class _Home extends State<Home> {
     });
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('GoShare'),
       ),
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children : <Widget>[
+              Container(
+                height: 250,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20)
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("Electronics",style: TextStyle(color: Colors.purple, fontSize: 30,fontWeight: FontWeight.bold),),
+                      SizedBox(height: 30, ),
+                      GridView.count(
+                          crossAxisCount: 1,
+                          children: <Widget>[
+
+                          ]
+                      )
+
+                    ],
+                  )
+                ),
+              )
+
+
+
+            ],
+          ),
+        )
+
+      )
+
+      ,
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -79,6 +118,7 @@ class _Home extends State<Home> {
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),
+
     );
   }
 }
