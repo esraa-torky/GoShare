@@ -60,7 +60,7 @@ class _Home extends State<Home> {
         title: const Text('GoShare'),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: Container(
           child: Column(
             children : <Widget>[
               Container(
@@ -78,16 +78,35 @@ class _Home extends State<Home> {
                     children: <Widget>[
                       Text("Electronics",style: TextStyle(color: Colors.purple, fontSize: 30,fontWeight: FontWeight.bold),),
                       SizedBox(height: 30, ),
-                      GridView.count(
-                          crossAxisCount: 1,
-                          children: <Widget>[
 
-                          ]
-                      )
 
                     ],
                   )
                 ),
+              ),
+              Expanded(
+                child: GridView.count(
+                    crossAxisCount: 1,
+                    padding: EdgeInsets.all(20),
+                    crossAxisSpacing: 20,
+                    mainAxisSpacing: 20,
+                    children: <Widget>[
+                      Card(
+                        child: Container(
+                          decoration: BoxDecoration(
+
+                          ),
+                        ),
+                      ),
+                      Card(
+                        child: Container(
+                          decoration: BoxDecoration(
+
+                          ),
+                        ),
+                      )
+                    ]
+                )
               )
 
 
