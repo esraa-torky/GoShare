@@ -21,7 +21,7 @@ class ProductView extends StatelessWidget {
           child: Column(
             children: [
               titleWidget(product.title, Colors.black,
-                  categoryName: product.incomingCategoryName),
+                  categoryName: product.incomingCategoryName,),
               SearchWidget(
                 searchController: product.searchController,
                 search: product.searchProduct,

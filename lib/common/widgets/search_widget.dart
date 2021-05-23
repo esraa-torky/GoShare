@@ -18,14 +18,15 @@ class SearchWidget extends StatelessWidget {
       child: TextField(
         textAlign: TextAlign.center,
         controller: searchController,
-        style: TextStyle(fontSize: SizeConfig.text * 2),
+        style: TextStyle(fontSize: SizeConfig.text * 2, color: Colors.black),
         onChanged: (String value) => search(value),
         decoration: InputDecoration(
             border: new OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(30.0)),
-                borderSide: BorderSide(color: Colors.white, width: 0.0)),
-            hintText: 'Search...'),
-        autofocus: false,
+                borderSide: BorderSide(color: Colors.pinkAccent, width: 0)),
+            hintText: 'Search For Categories...'),
+        autofocus: true,
+
       ),
     );
   }

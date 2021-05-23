@@ -24,16 +24,17 @@ class CategoryList extends StatelessWidget {
                       textStyle: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: SizeConfig.text * 5,
+                        fontFamily: 'OpenSans',
                       ),
                       alignment: Alignment.center,
-                      primary: Colors.white,
-                      backgroundColor: Colors.blue[400],
+                      primary: Colors.black87,
+                      backgroundColor: Colors.purple[200],
                       side: BorderSide(
-                        color: Colors.blue[400],
-                        width: 2,
+                        color: Colors.black54,
+                        width: 0.5,
                       ),
                       shape: const BeveledRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                          borderRadius: BorderRadius.all(Radius.circular(5))),
                     ),
                     onPressed: () async {
                       var productProvider =

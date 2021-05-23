@@ -15,7 +15,8 @@ Container titleWidget(String title, Color fontColor, {String categoryName}) {
       style: TextStyle(
           color: fontColor,
           fontSize: SizeConfig.text * 5,
-          fontWeight: FontWeight.bold),
+          fontWeight: FontWeight.bold,
+          fontFamily: 'OpenSans'),
     ),
   );
 }

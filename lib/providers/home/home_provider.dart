@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_share/models/Category.dart';
 
 class HomeProvider extends ChangeNotifier {
-  String title = 'Categories';
+  String title = 'CATEGORIES';
   TextEditingController searchController = TextEditingController(text: '');
   List<Category> categories = [
-    Category('Electronics', [
+    Category('ELECTRONICS', [
       {
         'name': 'Printer 1',
         'image': 'images/electronics/printer1.jpg',
@@ -35,7 +35,7 @@ class HomeProvider extends ChangeNotifier {
             'aaaaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaa aaaa aaaaaa aaaa aaaaa aaaaa aaaa aaaaa aaa'
       }
     ]),
-    Category('Telephone', [
+    Category('TELEPHONE', [
       {
         'name': 'Samsung S6',
         'image': 'images/telephone/samsungs6.jpg',
@@ -65,7 +65,7 @@ class HomeProvider extends ChangeNotifier {
             'aaaaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaa aaaa aaaaaa aaaa aaaaa aaaaa aaaa aaaaa aaa'
       },
     ]),
-    Category('Wear', [
+    Category('CLOTHING', [
       {
         'name': 'T-Shirt',
         'image': 'images/wear/tshirt1.jpg',
@@ -81,7 +81,7 @@ class HomeProvider extends ChangeNotifier {
             'aaaaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaa aaaa aaaaaa aaaa aaaaa aaaaa aaaa aaaaa aaa'
       },
     ]),
-    Category('White Goods', [
+    Category('WHITE GOODS', [
       {
         'name': 'Washing machine',
         'image': 'images/whitegoods/washingmachine1.jpg',
