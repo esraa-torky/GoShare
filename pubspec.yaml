@@ -51,6 +51,7 @@ flutter:
     - assets/images/electronics/
     - assets/images/wear/
     - assets/images/whitegoods/
+    - assets/images/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

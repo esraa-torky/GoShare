@@ -25,7 +25,7 @@ class SearchWidget extends StatelessWidget {
                 borderRadius: const BorderRadius.all(Radius.circular(30.0)),
                 borderSide: BorderSide(color: Colors.pinkAccent, width: 0)),
             hintText: 'Search For Categories...'),
-        autofocus: true,
+        autofocus: false,
 
       ),
     );

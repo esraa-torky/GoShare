@@ -34,7 +34,7 @@ class HomeProvider extends ChangeNotifier {
         'desc':
             'aaaaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaa aaaa aaaaaa aaaa aaaaa aaaaa aaaa aaaaa aaa'
       }
-    ]),
+    ], 'assets/images/e.png'),
     Category('TELEPHONE', [
       {
         'name': 'Samsung S6',
@@ -64,7 +64,7 @@ class HomeProvider extends ChangeNotifier {
         'desc':
             'aaaaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaa aaaa aaaaaa aaaa aaaaa aaaaa aaaa aaaaa aaa'
       },
-    ]),
+    ], 'assets/images/c.png'),
     Category('CLOTHING', [
       {
         'name': 'T-Shirt',
@@ -80,7 +80,7 @@ class HomeProvider extends ChangeNotifier {
         'desc':
             'aaaaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaa aaaa aaaaaa aaaa aaaaa aaaaa aaaa aaaaa aaa'
       },
-    ]),
+    ], 'assets/images/wear/tshirt1.jpg'),
     Category('WHITE GOODS', [
       {
         'name': 'Washing machine',
@@ -96,7 +96,7 @@ class HomeProvider extends ChangeNotifier {
         'desc':
             'aaaaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaa aaaa aaaaaa aaaa aaaaa aaaaa aaaa aaaaa aaa'
       },
-    ]),
+    ],'assets/images/c.png'),
   ];
   List<Category> filteredCategories = [
     Category('Electronics', [
@@ -128,7 +128,7 @@ class HomeProvider extends ChangeNotifier {
         'desc':
             'aaaaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaa aaaa aaaaaa aaaa aaaaa aaaaa aaaa aaaaa aaa'
       }
-    ]),
+    ], 'assets/images/e.png'),
     Category('Telephone', [
       {
         'name': 'Samsung S6',
@@ -158,7 +158,7 @@ class HomeProvider extends ChangeNotifier {
         'desc':
             'aaaaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaa aaaa aaaaaa aaaa aaaaa aaaaa aaaa aaaaa aaa'
       },
-    ]),
+    ], 'assets/images/c.png'),
     Category('Wear', [
       {
         'name': 'T-Shirt',
@@ -174,7 +174,7 @@ class HomeProvider extends ChangeNotifier {
         'desc':
             'aaaaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaa aaaa aaaaaa aaaa aaaaa aaaaa aaaa aaaaa aaa'
       },
-    ]),
+    ], 'assets/images/c.png'),
     Category('White Goods', [
       {
         'name': 'Washing machine',
@@ -190,7 +190,7 @@ class HomeProvider extends ChangeNotifier {
         'desc':
             'aaaaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaaa aaaa aaaa aaaa aaaaaa aaaa aaaaa aaaaa aaaa aaaaa aaa'
       },
-    ]),
+    ], 'assets/images/c.png'),
   ];
 
   void searchCategories(val) {

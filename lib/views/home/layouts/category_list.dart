@@ -20,22 +20,33 @@ class CategoryList extends StatelessWidget {
             mainAxisSpacing: 10,
             children: [
               ...categories.map((category) => TextButton(
-                    style: TextButton.styleFrom(
-                      textStyle: TextStyle(
-                        fontWeight: FontWeight.bold,
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(category.categoryImage,),
+                     fit: BoxFit.fill
+                    ),
+
+                  ),
+                 child: Text(category.categoryName,),
+
+
+                ),
+                style: TextButton.styleFrom(
+                  textStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
                         fontSize: SizeConfig.text * 5,
                         fontFamily: 'OpenSans',
                       ),
                       alignment: Alignment.center,
-                      primary: Colors.black87,
-                      backgroundColor: Colors.purple[200],
+                      primary: Colors.white,
                       side: BorderSide(
                         color: Colors.black54,
                         width: 0.5,
                       ),
-                      shape: const BeveledRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5))),
+
                     ),
+
                     onPressed: () async {
                       var productProvider =
                           Provider.of<ProductProvider>(context, listen: false);
@@ -45,10 +56,7 @@ class CategoryList extends StatelessWidget {
                       await Navigator.of(context).push(MaterialPageRoute(
                           builder: (BuildContext context) => ProductView()));
                     },
-                    child: Text(
-                      category.categoryName,
-                      textAlign: TextAlign.center,
-                    ),
+
                   ))
             ],
           )
