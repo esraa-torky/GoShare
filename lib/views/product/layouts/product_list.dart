@@ -14,11 +14,26 @@ class ProductList extends StatelessWidget {
     return products.isNotEmpty
         ? GridView.count(
             physics: BouncingScrollPhysics(),
-            crossAxisCount: 1,
-            childAspectRatio: 4,
+            crossAxisCount: 2,
+            childAspectRatio: 1,
             mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
             children: [
               ...products.map((product) => TextButton(
+
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/' + product['image'],),
+                        fit: BoxFit.fill
+                    ),
+
+                  ),
+                  //child: Text(category.categoryName,),
+
+
+                ),
+
                     style: TextButton.styleFrom(
                       textStyle: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -26,13 +41,13 @@ class ProductList extends StatelessWidget {
                       ),
                       alignment: Alignment.center,
                       primary: Colors.white,
-                      backgroundColor: Colors.blue[400],
+                      backgroundColor: Color(0xff669966),
                       side: BorderSide(
-                        color: Colors.blue[400],
-                        width: 2,
+                        color: Color(0xff669966),
+                        width: 0.1,
                       ),
                       shape: const BeveledRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                          borderRadius: BorderRadius.all(Radius.circular(1))),
                     ),
                     onPressed: () async {
                       var productProvider =
@@ -42,10 +57,7 @@ class ProductList extends StatelessWidget {
                       await Navigator.of(context).push(MaterialPageRoute(
                           builder: (BuildContext context) => ProductItem()));
                     },
-                    child: Text(
-                      product['name'],
-                      textAlign: TextAlign.center,
-                    ),
+
                   ))
             ],
           )

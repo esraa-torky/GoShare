@@ -52,6 +52,7 @@ class ProductItem extends StatelessWidget {
                                   child: Text(
                                     '${product.tempProduct['name']}',
                                     style: TextStyle(
+                                      fontFamily: 'QuickSand',
                                       fontSize: 30,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -61,8 +62,9 @@ class ProductItem extends StatelessWidget {
                                   child: Text(
                                     '\$${product.tempProduct['price']}',
                                     style: TextStyle(
+                                      fontFamily: 'QuickSand',
                                       fontSize: 30,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.normal,
                                     ),
                                   ),
                                 ),
@@ -72,8 +74,9 @@ class ProductItem extends StatelessWidget {
                                     '${product.tempProduct['desc']}',
                                     style: TextStyle(
                                       color: Colors.grey,
+                                      fontFamily: 'Ubuntu',
                                       fontSize: 30,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.normal,
                                     ),
                                   ),
                                 ),
@@ -90,14 +93,16 @@ class ProductItem extends StatelessWidget {
                                       alignment: Alignment.center,
                                       backgroundColor:
                                           MaterialStateProperty.all(
-                                              Colors.green),
+                                              Color(0xff669966)
+                                          ),
                                     ),
                                     label: Text(
                                       'Add to Cart',
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color: Color(0xffffcc00),
+                                        fontFamily: 'Ubuntu',
                                         fontWeight: FontWeight.bold,
-                                        fontSize: SizeConfig.text * 5,
+                                        fontSize: SizeConfig.text * 3,
                                       ),
                                     ),
                                   ),
@@ -134,6 +139,7 @@ class ProductItem extends StatelessWidget {
                         child: Text(
                           '${product.tempProduct['name']}',
                           style: TextStyle(
+                            fontFamily: 'QuickSand',
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
@@ -141,8 +147,9 @@ class ProductItem extends StatelessWidget {
                       ),
                       Container(
                         child: Text(
-                          '\$${product.tempProduct['price']}',
+                          '\$${product.tempProduct['points']}',
                           style: TextStyle(
+                            fontFamily: 'QuickSand',
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
@@ -154,6 +161,7 @@ class ProductItem extends StatelessWidget {
                           '${product.tempProduct['desc']}',
                           style: TextStyle(
                             color: Colors.grey,
+                            fontFamily: 'QuickSand',
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
@@ -171,7 +179,7 @@ class ProductItem extends StatelessWidget {
                           style: ButtonStyle(
                               alignment: Alignment.center,
                               backgroundColor:
-                                  MaterialStateProperty.all(Colors.green),
+                                  MaterialStateProperty.all(Color(0xff333333)),
                               shape: MaterialStateProperty.all(
                                 BeveledRectangleBorder(
                                     borderRadius:
@@ -180,9 +188,10 @@ class ProductItem extends StatelessWidget {
                           label: Text(
                             'Add to Cart',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Color(0xffffcc00),
+                              fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.bold,
-                              fontSize: SizeConfig.text * 5,
+                              fontSize: SizeConfig.text * 3,
                             ),
                           ),
                         ),

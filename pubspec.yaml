@@ -51,6 +51,8 @@ flutter:
     - assets/images/electronics/
     - assets/images/wear/
     - assets/images/whitegoods/
+    - assets/images/sport/
+    - assets/images/film/
     - assets/images/
 
 
@@ -70,6 +72,17 @@ flutter:
       fonts:
         - asset: fonts/OpenSans-Bold.ttf
         - asset: fonts/OpenSans-Light.ttf
+    - family: QuickSand
+      fonts:
+        - asset: fonts/QuickSand-Bold.ttf
+        - asset: fonts/QuickSand-Light.ttf
+        - asset: fonts/QuickSand-Regular.ttf
+        - asset: fonts/QuickSand-Medium.ttf
+    - family: Ubuntu
+      fonts:
+        - asset: fonts/Ubuntu-Bold.ttf
+        - asset: fonts/Ubuntu-Italic.ttf
+        - asset: fonts/Ubuntu-Regular.ttf
 
 
   # For details regarding fonts from package dependencies,

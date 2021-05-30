@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_share/core/util/init/helper/size_config.dart';
 import 'package:go_share/models/Category.dart';
 import 'package:go_share/providers/product/product_provider.dart';
@@ -15,9 +17,10 @@ class CategoryList extends StatelessWidget {
     return categories.isNotEmpty
         ? GridView.count(
             physics: BouncingScrollPhysics(),
-            crossAxisCount: 1,
-            childAspectRatio: 4,
-            mainAxisSpacing: 10,
+            crossAxisCount: 2,
+            childAspectRatio: 1,
+            mainAxisSpacing: 20,
+            crossAxisSpacing: 10,
             children: [
               ...categories.map((category) => TextButton(
                 child: Container(
@@ -28,7 +31,7 @@ class CategoryList extends StatelessWidget {
                     ),
 
                   ),
-                 child: Text(category.categoryName,),
+                 //child: Text(category.categoryName,),
 
 
                 ),
@@ -56,6 +59,7 @@ class CategoryList extends StatelessWidget {
                       await Navigator.of(context).push(MaterialPageRoute(
                           builder: (BuildContext context) => ProductView()));
                     },
+
 
                   ))
             ],

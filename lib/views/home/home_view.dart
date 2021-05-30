@@ -14,13 +14,13 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('GoShare', style: const TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.bold)), backgroundColor: Colors.deepPurple,
+        title: Text('GoShare', style: const TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.bold)), backgroundColor: Color(0xff669966),
       ),
       body: Consumer<HomeProvider>(
         builder: (ctxHome, home, child) => SafeArea(
           child: Column(
             children: [
-              titleWidget(home.title, Colors.deepPurple),
+              titleWidget(home.title, Color(0xff669966)),
               SearchWidget(
                 searchController: home.searchController,
                 search: home.searchCategories,
