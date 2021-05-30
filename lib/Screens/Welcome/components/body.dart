@@ -23,7 +23,7 @@ class Body extends StatelessWidget {
             SizedBox(height: size.height * 0.05),
             CircleAvatar(
               radius: 150.0,
-              backgroundImage: AssetImage('images/GoShare.png'),
+              backgroundImage: AssetImage('assets/images/GoShare.png'),
             ),
             SizedBox(height: size.height * 0.05),
             RoundedButton(

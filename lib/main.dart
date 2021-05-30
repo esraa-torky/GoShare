@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_share/Screens/Welcome/welcome_screen.dart';
 
 import 'package:go_share/core/util/init/helper/size_config.dart';
 import 'package:go_share/providers/home/home_provider.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: _title,
-      home: HomeView(),
+      home: WelcomeScreen(),
     );
   }
 }

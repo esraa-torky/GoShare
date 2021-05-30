@@ -82,15 +82,15 @@ class Body extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SocalIcon(
-                  iconSrc: "assets/icons/facebook.svg",
+                  iconSrc: "assets/images/icons/facebook.svg",
                   press: () {},
                 ),
                 SocalIcon(
-                  iconSrc: "assets/icons/twitter.svg",
+                  iconSrc: "assets/images/icons/twitter.svg",
                   press: () {},
                 ),
                 SocalIcon(
-                  iconSrc: "assets/icons/google-plus.svg",
+                  iconSrc: "assets/images/icons/google-plus.svg",
                   press: () {},
                 ),
               ],
