@@ -184,7 +184,7 @@ class ProductItem extends StatelessWidget {
                               shape: MaterialStateProperty.all(
                                 BeveledRectangleBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
+                                        BorderRadius.all(Radius.circular(2))),
                               )),
                           label: Text(
                             'Add to Cart',
