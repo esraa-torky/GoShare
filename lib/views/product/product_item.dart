@@ -15,6 +15,7 @@ class ProductItem extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('GoShare'),
+        backgroundColor: Color(0xff669966),
       ),
       body: Consumer<ProductProvider>(
         builder: (ctxHome, product, child) => SafeArea(

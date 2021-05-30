@@ -8,9 +8,9 @@ Container titleWidget(String title, Color fontColor, {String categoryName}) {
     alignment: Alignment.center,
     width: double.infinity,
     child: AutoSizeText(
-      '$title${categoryName != null ? ' - $categoryName' : ''}',
+      '$title${categoryName != null ? '  $categoryName' : ''}',
       maxLines: 2,
-      minFontSize: 10,
+      minFontSize: 5,
       textAlign: TextAlign.center,
       style: TextStyle(
           color: fontColor,

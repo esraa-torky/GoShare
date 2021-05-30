@@ -21,15 +21,16 @@ class CategoryList extends StatelessWidget {
             childAspectRatio: 1,
             mainAxisSpacing: 20,
             crossAxisSpacing: 10,
+            padding: EdgeInsets.all(10),
             children: [
               ...categories.map((category) => TextButton(
                 child: Container(
+
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(category.categoryImage,),
                      fit: BoxFit.fill
                     ),
-
                   ),
                  //child: Text(category.categoryName,),
 
@@ -44,8 +45,8 @@ class CategoryList extends StatelessWidget {
                       alignment: Alignment.center,
                       primary: Colors.white,
                       side: BorderSide(
-                        color: Colors.black54,
-                        width: 0.5,
+                        color: Color(0xffffcc00),
+                        width: 2,
                       ),
 
                     ),

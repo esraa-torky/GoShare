@@ -96,14 +96,14 @@ class HomeProvider extends ChangeNotifier {
     Category('FILM', [
       {
         'name': 'Seven DVD',
-        'image': 'images/film/seven_dvd.jpg',
+        'image': 'images/film/seven_dvd.jpeg',
         'price': 40,
         'desc':
         'This movie is the best!'
       },
       {
         'name': 'The Godfather DVD',
-        'image': 'images/film/the_godfather_dvd.jpg',
+        'image': 'images/film/the_godfather_dvd.jpeg',
         'price': 35,
         'desc':
         'I dont need this DVD anymore because there is Netflix!'
@@ -246,14 +246,14 @@ class HomeProvider extends ChangeNotifier {
     Category('FILM', [
       {
         'name': 'Seven DVD',
-        'image': 'images/film/seven_dvd.jpg',
+        'image': 'images/film/seven_dvd.jpeg',
         'price': 40,
         'desc':
         'This movie is the best!'
       },
       {
         'name': 'The Godfather DVD',
-        'image': 'images/film/the_godfather_dvd.jpg',
+        'image': 'images/film/the_godfather_dvd.jpeg',
         'price': 35,
         'desc':
         'I dont need this DVD anymore because there is Netflix!'

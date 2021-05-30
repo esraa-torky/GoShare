@@ -65,6 +65,7 @@ class ProductList extends StatelessWidget {
             child: Text(
               'Product not found',
               style: TextStyle(
+                fontFamily: 'QuickSand',
                 fontWeight: FontWeight.bold,
                 fontSize: SizeConfig.text * 5,
               ),

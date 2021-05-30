@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class ProductProvider extends ChangeNotifier {
-  String title = 'Products';
+  String title = 'PRODUCTS';
   TextEditingController searchController = TextEditingController(text: '');
   String incomingCategoryName;
   Map<String, dynamic> tempProduct;
