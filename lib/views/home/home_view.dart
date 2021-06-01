@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_share/ContactUs.dart';
 import 'package:go_share/common/widgets/search_widget.dart';
 import 'package:go_share/common/widgets/title_widget.dart';
 import 'package:go_share/providers/home/home_provider.dart';
@@ -72,7 +73,14 @@ class HomeView extends StatelessWidget {
             // Update the state of the app
             // ...
             // Then close the drawer
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return ContactUsPage();
+                },
+              ),
+            );
           },
         ),
       ],
