@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "993096161022",
+    "project_id": "goshare-c756e",
+    "storage_bucket": "goshare-c756e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993096161022:android:eb859d6f6ac5cd580db7af",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "993096161022-76lqhcj7872fpkegd1v5t899tfc53uk3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMvHXXwGwN-autVWKSJ39BKRhqEghdH_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "993096161022-76lqhcj7872fpkegd1v5t899tfc53uk3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_core: "0.7.0"
+  firebase_auth: "^0.20.1"
   focused_menu: ^1.0.5
   provider: ^4.1.3
   auto_size_text: ^2.1.0
@@ -37,6 +39,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -11,11 +11,14 @@ import 'package:go_share/components/rounded_input_field.dart';
 import 'package:go_share/components/rounded_password_field.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_share/views/home/home_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Body extends StatelessWidget {
   final email = RoundedInputField(
     hintText: "Your Email",
-    onChanged: (value) {},
+    onChanged: (value) {
+
+    },
   );
 
   final password = RoundedPasswordField(
@@ -53,6 +56,7 @@ class Body extends StatelessWidget {
               text: "LOGIN",
               press: () {
                 var email = this.email;
+                FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
