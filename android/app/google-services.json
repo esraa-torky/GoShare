@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:993096161022:android:eb859d6f6ac5cd580db7af",
+        "mobilesdk_app_id": "1:993096161022:android:74a9504813b6dab30db7af",
         "android_client_info": {
-          "package_name": "com.android.application"
+          "package_name": "com.example.go_share"
         }
       },
       "oauth_client": [

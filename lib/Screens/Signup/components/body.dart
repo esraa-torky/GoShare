@@ -14,8 +14,10 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 class Body extends StatelessWidget {
   String email;
   String password;
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
+
     Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
@@ -70,21 +72,8 @@ class Body extends StatelessWidget {
             RoundedButton(
               color: Colors.green.shade400,
               text: "SIGNUP",
-              press: () async {
-                try {
-                  UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                      email: this.email,
-                      password: this.password
-                  );
-                } on FirebaseAuthException catch (e) {
-                  if (e.code == 'weak-password') {
-                    print('The password provided is too weak.');
-                  } else if (e.code == 'email-already-in-use') {
-                    print('The account already exists for that email.');
-                  }
-                } catch (e) {
-                  print(e);
-                }
+              press: ()  {
+                firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
 
 
 
