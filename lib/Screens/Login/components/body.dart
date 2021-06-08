@@ -56,7 +56,7 @@ class Body extends StatelessWidget {
               text: "LOGIN",
               press: () {
                 var email = this.email;
-                FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+                //FirebaseAuth.instance.em
                 Navigator.push(
                   context,
                   MaterialPageRoute(

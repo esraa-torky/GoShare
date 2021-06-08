@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_share/Screens/Login/login_screen.dart';
 import 'package:go_share/Screens/Signup/components/background.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class Body extends StatelessWidget {
+  String email;
+  String password;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -37,7 +40,9 @@ class Body extends StatelessWidget {
             ),
             RoundedInputField(
               hintText: "Name",
-              onChanged: (value) {},
+              onChanged: (value) {
+
+              },
             ),
             RoundedInputField(
               hintText: "Surname",
@@ -45,7 +50,9 @@ class Body extends StatelessWidget {
             ),
             RoundedInputField(
               hintText: "Email",
-              onChanged: (value) {},
+              onChanged: (value) {
+                this.email = value;
+              },
             ),
             RoundedInputField(
               hintText: "City",
@@ -56,12 +63,32 @@ class Body extends StatelessWidget {
               onChanged: (value) {},
             ),
             RoundedPasswordField(
-              onChanged: (value) {},
+              onChanged: (value) {
+                this.password = value;
+              },
             ),
             RoundedButton(
               color: Colors.green.shade400,
               text: "SIGNUP",
-              press: () {},
+              press: () async {
+                try {
+                  UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                      email: this.email,
+                      password: this.password
+                  );
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'weak-password') {
+                    print('The password provided is too weak.');
+                  } else if (e.code == 'email-already-in-use') {
+                    print('The account already exists for that email.');
+                  }
+                } catch (e) {
+                  print(e);
+                }
+
+
+
+              },
             ),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
