@@ -10,8 +10,8 @@ class Control{
   void creat(){
     for (int i=0;i<10;i++){
       User user=new User();
-      user.firstName="Esraa";
-      user.lastName="Torky"+i.toString();
+      user.firstName="user";
+      user.lastName="name"+i.toString();
       user.mail=user.firstName+"@gmail.com";
       user.points=100;
       user.city="istanbul";
