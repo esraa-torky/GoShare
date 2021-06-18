@@ -16,11 +16,6 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              "GOSHARE",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: size.height * 0.05),
             CircleAvatar(
               radius: 150.0,
               backgroundImage: AssetImage('assets/images/GoShare.png'),
@@ -42,8 +37,8 @@ class Body extends StatelessWidget {
             ),
             RoundedButton(
               text: "SIGN UP",
-              color: Colors.teal,
-              textColor: Colors.black,
+              color: Colors.green[400],
+              textColor: Colors.white,
               press: () {
                 Navigator.push(
                   context,
