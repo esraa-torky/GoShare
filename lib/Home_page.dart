@@ -58,16 +58,23 @@ class _HomePageState extends State<HomePage> {
                   title: Text('Chat',style: TextStyle(color: Colors.grey[600],fontFamily: 'QuickSand',fontWeight: FontWeight.w600)),
                   onTap: () {
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return Chat();
-                        },
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) {
+                    //       return Chat();
+                    //     },
+                    //   ),
+                    // );
                   },
                 ),
+
+                ListTile(
+                    title: Text('Maps',style: TextStyle(color: Colors.grey[600],fontFamily: 'QuickSand',fontWeight: FontWeight.w600)),
+                    onTap: () {
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return SellerProfile();},),);}),
                 ListTile(
                   title: Text('Settings',style: TextStyle(color: Colors.grey[600],fontFamily: 'QuickSand',fontWeight: FontWeight.w600)),
                   onTap: () {
@@ -82,12 +89,6 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
-                ListTile(
-                    title: Text('Maps',style: TextStyle(color: Colors.grey[600],fontFamily: 'QuickSand',fontWeight: FontWeight.w600)),
-                    onTap: () {
-
-                      Navigator.push(context, MaterialPageRoute(builder: (context) {
-                        return SellerProfile();},),);}),
                 ListTile(
 
                   title: Text('Contact Us',style: TextStyle(color: Colors.grey[600],fontFamily: 'QuickSand',fontWeight: FontWeight.w600)),

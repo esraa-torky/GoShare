@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,20 +11,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Item extends StatefulWidget {
   @override
-  String id,type;
-  Item({this.id,this.type});
-  _ItemState createState() => _ItemState(id:this.id,type: this.type);
+  Map item;
+  Item({this.item});
+  _ItemState createState() => _ItemState(itemDataMap: item);
 }
 
 class _ItemState extends State<Item> {
-  Map itemDataMap;
-  String id,type;
-  _ItemState({this.id,this.type});
-  // void initState()
-  // {
-  //   getData();
-  //   super.initState();
-  // }
+  Map itemDataMap,seller;
+
+  _ItemState({this.itemDataMap,});
+  void initState()
+  {
+    getData();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +42,7 @@ class _ItemState extends State<Item> {
           );
         }, icon: Icon(Icons.arrow_back,color: Colors.black,),),
       )
-      ,body: //itemDataMap != null?
+      ,body: seller != null?
     SingleChildScrollView(
          child: Padding(
            padding: const EdgeInsets.all(25.0),
@@ -69,15 +71,13 @@ class _ItemState extends State<Item> {
                ),
               ),
               SizedBox(height: 15),
-              Text('item name'
-                //itemDataMap['name']
+              Text(itemDataMap['name']
                 ,style: TextStyle(
                   color: Colors.grey,fontSize: 14
               ),
               ),
               SizedBox(height: 10),
-              Text('90'
-                //itemDataMap['points'].toString()
+              Text(itemDataMap['points'].toString()+' \$'
                 ,
                 style: TextStyle(
                   color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18
@@ -95,8 +95,7 @@ class _ItemState extends State<Item> {
               ),
               ),
               SizedBox(height: 8),
-              Text(//itemDataMap['description']
-                  'adadghjk asdfhr sdfghjkl aaaaaa druur',
+              Text(itemDataMap['description'],
                 style: TextStyle(
                   color: Colors.grey[500],fontSize: 14
                 ), textDirection: TextDirection.ltr
@@ -123,15 +122,20 @@ class _ItemState extends State<Item> {
                       ),
                     ),
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: CircleAvatar(backgroundImage: NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),
-                    backgroundColor: Colors.transparent,
+                    child: CircleAvatar(backgroundImage:
+                    seller['image'] !=null ? FileImage(File(seller['image']))
+                        :seller['image'].length != 0?NetworkImage(seller['image'])
+                        :NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'
+                    )
+
+                    ,backgroundColor: Colors.transparent,
                     ),
                   ),
                   SizedBox(width: 20,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:<Widget> [
-                    Text('User Name',style: TextStyle(
+                    Text(seller['user_name'].toString(),style: TextStyle(
                         color: Colors.black,fontSize: 14
                     ),
                     ),
@@ -158,12 +162,11 @@ class _ItemState extends State<Item> {
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   child: RaisedButton.icon(
                     onPressed: () async {
-
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return Chat();
+                            return Chat(seller);
                           },
                         ),
                       );
@@ -178,21 +181,20 @@ class _ItemState extends State<Item> {
             ],
            ),
          ),
-      )//: Center(child: CircularProgressIndicator())
+      ): Center(child: CircularProgressIndicator())
     );
 
   }
   getData() async
   {
-    CollectionReference type = FirebaseFirestore.instance.collection('CLOTHES');
+    CollectionReference user = FirebaseFirestore.instance.collection('Users');
 
 
-      type.doc(id).get().then((value)
+      user.doc(itemDataMap['sellerId']).get().then((value)
       {
-        itemDataMap = value.data();
+        seller= value.data();
         setState(() {
-          print(itemDataMap);
-        });
+          });
       }).catchError((e)
       {
         print('-------> error ${e.toString()}');
