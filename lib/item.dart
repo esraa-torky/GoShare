@@ -1,15 +1,28 @@
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:go_share/category_item.dart';
+import 'package:go_share/chat.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Item extends StatefulWidget {
   @override
-  _ItemState createState() => _ItemState();
+  String id,type;
+  Item({this.id,this.type});
+  _ItemState createState() => _ItemState(id:this.id,type: this.type);
 }
 
 class _ItemState extends State<Item> {
+  Map itemDataMap;
+  String id,type;
+  _ItemState({this.id,this.type});
+  // void initState()
+  // {
+  //   getData();
+  //   super.initState();
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +40,8 @@ class _ItemState extends State<Item> {
           );
         }, icon: Icon(Icons.arrow_back,color: Colors.black,),),
       )
-      ,body: SingleChildScrollView(
+      ,body: //itemDataMap != null?
+    SingleChildScrollView(
          child: Padding(
            padding: const EdgeInsets.all(25.0),
            child: Column(
@@ -55,12 +69,17 @@ class _ItemState extends State<Item> {
                ),
               ),
               SizedBox(height: 15),
-              Text('Electric Mountain Bike',style: TextStyle(
+              Text('item name'
+                //itemDataMap['name']
+                ,style: TextStyle(
                   color: Colors.grey,fontSize: 14
               ),
               ),
               SizedBox(height: 10),
-              Text('\$ 520.66',style: TextStyle(
+              Text('90'
+                //itemDataMap['points'].toString()
+                ,
+                style: TextStyle(
                   color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18
               ),
               ),
@@ -76,7 +95,8 @@ class _ItemState extends State<Item> {
               ),
               ),
               SizedBox(height: 8),
-              Text('Ride in style with the Hyper E-Ride Electric Hybrid Bike, 36V Battery. This 26" electric bike includes front and rear V-brakes for enhanced stopping power and front suspension forks for a comfortable ride. It also has an integrated flush-mounted battery and a rear hub brushless motor. The battery charges in around 4 hours and lasts for about 20 miles.',
+              Text(//itemDataMap['description']
+                  'adadghjk asdfhr sdfghjkl aaaaaa druur',
                 style: TextStyle(
                   color: Colors.grey[500],fontSize: 14
                 ), textDirection: TextDirection.ltr
@@ -137,6 +157,17 @@ class _ItemState extends State<Item> {
                   ),
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   child: RaisedButton.icon(
+                    onPressed: () async {
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return Chat();
+                          },
+                        ),
+                      );
+                    },
                     disabledColor: Colors.green,
                       icon:Icon(Icons.chat,color: Colors.white,),
                       label: Text("Contact Me",style: TextStyle(
@@ -147,7 +178,25 @@ class _ItemState extends State<Item> {
             ],
            ),
          ),
-      )
+      )//: Center(child: CircularProgressIndicator())
     );
+
+  }
+  getData() async
+  {
+    CollectionReference type = FirebaseFirestore.instance.collection('CLOTHES');
+
+
+      type.doc(id).get().then((value)
+      {
+        itemDataMap = value.data();
+        setState(() {
+          print(itemDataMap);
+        });
+      }).catchError((e)
+      {
+        print('-------> error ${e.toString()}');
+      });
+
   }
 }

@@ -1,13 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class Chat extends StatefulWidget {
   @override
   _ChatState createState() => _ChatState();
 }
 
 class _ChatState extends State<Chat> {
+  String id1,id2;
+  Map reciverName;
+
   @override
+  void initState()
+  {
+    getUserId();
+    super.initState();
+  }
   Widget build(BuildContext context) {
-    return Scaffold(
+    return reciverName != null?Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green[400],
         shadowColor: Colors.transparent,
@@ -19,7 +29,7 @@ class _ChatState extends State<Chat> {
             ),
             ),
             SizedBox(width: 12),
-            Text('User name',style: TextStyle(
+            Text(reciverName['user_name'],style: TextStyle(
                 fontSize: 16
             ),
             ),
@@ -69,7 +79,41 @@ class _ChatState extends State<Chat> {
           ],
         ),
       ),
-    );
+    ): Center(child: CircularProgressIndicator());
+  }
+  sendMassage(){
+
+  }
+  getMassage(){
+
+  }
+  getUserId() async
+  {
+
+    await SharedPreferences.getInstance().then((value)
+    {
+      id1 = value.getString('userID');
+
+    });
+  }
+  getUser2Info() async
+  {
+
+    CollectionReference users = FirebaseFirestore.instance.collection('Users');
+    {
+
+      id2 = 'vYeHVPY1hWMC7N30sdXeoZA8YbI2';
+      users.doc(id2).get().then((value)
+      {
+        reciverName= value.data();
+        setState(() {
+
+        });
+      }).catchError((e)
+      {
+        print('-------> error ${e.toString()}');
+      });
+    };
   }
   Widget messagebody()=>
       Padding(

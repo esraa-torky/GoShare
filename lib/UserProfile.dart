@@ -12,6 +12,7 @@ import 'package:go_share/Product.dart';
 import 'package:go_share/User.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'Home_page.dart';
 import 'control.dart';
 import 'Product.dart';
 var colors = creatingColors();
@@ -45,15 +46,10 @@ class _UserProfileState extends State<UserProfile> {
     return DefaultTabController(
         length: 2,
         child: Scaffold(
-          backgroundColor: Colors.white,
-          /*appBar: PreferredSize(
-            preferredSize: Size.fromHeight(50.0),child:AppBar(
-            backgroundColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            bottomOpacity: 0.0,
-            elevation: 0.0,
-            iconTheme: IconThemeData(color: Colors.black), )),*/
+          backgroundColor: Colors.grey[100],
+
           bottomNavigationBar:BottomAppBar (
+            color: Colors.grey[100],
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child:
@@ -67,9 +63,14 @@ class _UserProfileState extends State<UserProfile> {
                       radius: 20,
                       backgroundColor: colors[0],
                       child: IconButton(icon: Icon(Icons.home,size: 20,color: Colors.white,)
-                          , onPressed: () {users[0].addProducttolist(1);
-                          setState(() {
-                          });}),
+                          , onPressed: () {Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return HomePage();
+                              },
+                            ),
+                          );}),
                     ),
                   ),
                   Padding(
@@ -208,15 +209,15 @@ class _UserProfileState extends State<UserProfile> {
           Center(
             child: Row (
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children:<Widget>[
                   //number of items
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text("Items",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: colors[0],),),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: colors[0],fontFamily: 'QuickSand'),),
                       Text(userProduct.length.toString(),
                         style: TextStyle(color: Colors.grey,fontSize: 18),)
                     ],
@@ -227,7 +228,7 @@ class _UserProfileState extends State<UserProfile> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text("Points",style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: colors[0]),),
+                      Text("Points",style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: colors[0],fontFamily: 'QuickSand'),),
                       Text(users[0].points.toString(),style: TextStyle(color: Colors.grey,fontSize: 18),)
                     ],
                   ),
@@ -249,14 +250,14 @@ class _UserProfileState extends State<UserProfile> {
            Text(userDataMap['user_name'],
             style: TextStyle(color: Colors.black54, fontSize: 18,fontWeight: FontWeight.bold,fontFamily: 'QuickSand'),
           ),
-
-        Text(userDataMap['email'],
-          style: TextStyle(color: colors[2], fontSize: 15,),
-        ),
+          SizedBox(height: 10,),
+        // Text(userDataMap['email'],
+        //   style: TextStyle(color: colors[2], fontSize: 15,),
+        // ),
         RichText(text: TextSpan(children: [
           WidgetSpan(child: Icon(Icons.location_on_sharp,color: colors[0],size: 18,)),
           TextSpan(text:userDataMap['city']+','+userDataMap['neighbourhood'],
-              style: TextStyle(color: Colors.blueGrey,fontSize:15,fontWeight: FontWeight.bold ))])),]),);
+              style: TextStyle(color: Colors.blueGrey,fontSize:15,fontWeight: FontWeight.bold,fontFamily: 'QuickSand' ))])),]),);
   }
   Align profilePicOptions(){
     return Align(
@@ -273,7 +274,6 @@ class _UserProfileState extends State<UserProfile> {
             trailingIcon: Icon(Icons.image,color: colors[2],),
             onPressed: (){
             selectImage();
-            uploadImage();
             }
           ),
         ],
@@ -303,7 +303,7 @@ class _UserProfileState extends State<UserProfile> {
   //tab bar
   AppBar itemsViewBar(){
     return AppBar(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[100],
       bottom: TabBar(tabs: [Tab(icon: Icon(Icons.grid_view,color: colors[0],),),
         Tab(icon: Icon(Icons.view_day_rounded,color: colors[0],))]),
     )
@@ -320,7 +320,7 @@ class _UserProfileState extends State<UserProfile> {
       return Container();
     }
     return Container(
-      color: Colors.white,
+      color: Colors.grey[100],
       child: GridView.builder(itemCount: userProduct.length,
           //physics: NeverScrollableScrollPhysics(),
           gridDelegate:
@@ -574,45 +574,7 @@ class _UserProfileState extends State<UserProfile> {
 
 
 
-  //NOT WORKING
-  Future uploadImageToFirebase(BuildContext context) async {
-    String fileName = imageFile.path.split('/').last;
-    StorageReference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('uploads/$fileName');
-    StorageUploadTask uploadTask = firebaseStorageRef.putFile(imageFile);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
-    taskSnapshot.ref.getDownloadURL().then(
-          (value) => print("Done: $value"),
-    );
-  }
-  uploadImage() async
-  {
 
-
-    FirebaseStorage.instance.ref()
-        .child('${imageFile.uri.pathSegments[imageFile.uri.pathSegments.length - 1]}')
-        .putFile(imageFile).onComplete.then((value) async
-    {
-      await value.ref.getDownloadURL().then((value)
-      {
-        CollectionReference users = FirebaseFirestore.instance.collection('Users');
-
-        users.doc(id).update({
-          'image': value.toString(),
-
-        }).then((value)
-        {
-          getData();
-         /* setState(() {
-
-          });*/
-        }).catchError((error)
-        {
-          print(error.toString());
-        });
-      });
-    });
-  }
 
 
 

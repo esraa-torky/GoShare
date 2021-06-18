@@ -12,6 +12,7 @@ import 'package:go_share/components/rounded_button.dart';
 import 'package:go_share/components/rounded_input_field.dart';
 import 'package:go_share/components/rounded_password_field.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 
@@ -58,7 +59,11 @@ class _BodyState extends State<Body> {
                    await FirebaseAuth.instance.signInWithEmailAndPassword(
                       email: email,
                       password: password
-                  );
+
+                  ).then((value) async {
+                     SharedPreferences prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('userID', value.user.uid);
+                   });
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'user-not-found') {
                     print('No user found for that email.');
