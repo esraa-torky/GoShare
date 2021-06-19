@@ -23,7 +23,7 @@ class ContactUsPage extends StatelessWidget{
             email: 'goshare@gmail.com',
             companyName: 'GoShare',
             companyColor: Colors.teal.shade100,
-            phoneNumber: '000000000',
+            phoneNumber: '000000000000',
             tagLine: 'DEVELOPERS',
             taglineColor: Colors.teal.shade100,
 

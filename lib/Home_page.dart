@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return SettingsUI();
+                          return EditProfilePage();
                         },
                       ),
                     );
@@ -93,10 +93,9 @@ class _HomePageState extends State<HomePage> {
 
                   title: Text('Contact Us',style: TextStyle(color: Colors.grey[600],fontFamily: 'QuickSand',fontWeight: FontWeight.w600)),
                   onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+              return SellerProfile();},),);}),
 
-                    Navigator.pop(context);
-                  },
-                ),
                 Container(
                   color: Colors.red[50],
                   child: ListTile(
