@@ -91,6 +91,7 @@ class _ChatState extends State<Chat> {
                 IconButton(icon: Icon(Icons.send,color: Colors.green,),
                   onPressed: (){
                   sendMassage(customeController.text);
+                  customeController.clear();
                 },
                 )
               ],
@@ -98,18 +99,24 @@ class _ChatState extends State<Chat> {
           ],
         ),
       ): Center(child: CircularProgressIndicator()),
-    );//: Center(child: CircularProgressIndicator());
+    );
   }
   sendMassage(massage) async {
-    CollectionReference chat = FirebaseFirestore.instance.collection('chats');
+
     DateTime now = DateTime.now();
-    await SharedPreferences.getInstance().then((value)
-    {
+    await SharedPreferences.getInstance().then((value) {
       id1 = value.getString('userID');
-      FirebaseFirestore.instance.collection('chats').doc(id1)
-          .collection('/$id2').add({
+      FirebaseFirestore.instance.collection('Users').doc(id1)
+          .collection('chats').doc(id2).collection('massage').add({
+            'sender':id1,
             'massage':massage,
             'time':now.hour.toString() + ":" + now.minute.toString(),
+      });
+      FirebaseFirestore.instance.collection('Users').doc(id2)
+          .collection('chats').doc(id1).collection('massage').add({
+        'sender':id1,
+        'massage':massage,
+        'time':now.hour.toString() + ":" + now.minute.toString(),
       }
       );
       setState(() {
@@ -118,16 +125,15 @@ class _ChatState extends State<Chat> {
     });
   }
   getMassage() async {
-    CollectionReference chat = FirebaseFirestore.instance.collection('chats');
-    await SharedPreferences.getInstance().then((value)
-    async {
+    await SharedPreferences.getInstance().then((value) async {
       id1 = value.getString('userID');
-      final snapshot= await FirebaseFirestore.instance.collection('chats').doc(id1).collection(id2).get();
+      final snapshot= await FirebaseFirestore.instance.collection('Users').doc(id1).collection('chats').doc(id2).collection('massage').get();
+      print(snapshot.docs);
       massages=snapshot.docs.map((doc) => doc.data()).toList();
       chack=true;
       setState(() {
-      });
-  });}
+      });});
+  }
 
   Widget messagebody(index)=>
       Padding(

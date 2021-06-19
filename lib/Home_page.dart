@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:go_share/Home_page.dart';
 import 'package:go_share/category_item.dart';
 import 'package:go_share/chat.dart';
+import 'package:go_share/chatsScreen.dart';
 import 'package:go_share/item.dart';
 import 'package:go_share/sellerProfile.dart';
 import 'package:go_share/setting.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Screens/Welcome/welcome_screen.dart';
 import 'UserProfile.dart';
@@ -23,7 +25,6 @@ class _HomePageState extends State<HomePage> {
       Scaffold(
         backgroundColor: Colors.grey[100],
         drawer: Drawer(
-
           child: Container(
             color: Colors.grey[100],
             child: ListView(
@@ -58,14 +59,14 @@ class _HomePageState extends State<HomePage> {
                   title: Text('Chat',style: TextStyle(color: Colors.grey[600],fontFamily: 'QuickSand',fontWeight: FontWeight.w600)),
                   onTap: () {
 
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) {
-                    //       return Chat();
-                    //     },
-                    //   ),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return ChatsScreen();
+                        },
+                      ),
+                    );
                   },
                 ),
 
@@ -102,7 +103,7 @@ class _HomePageState extends State<HomePage> {
                   child: ListTile(
                     title: Text('Log Out',style: TextStyle(color: Colors.redAccent,fontFamily: 'QuickSand',fontWeight: FontWeight.w600),),
                     onTap: () {
-                      FirebaseAuth.instance.signOut().then((value) {
+                      FirebaseAuth.instance.signOut().then((value) async {
                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=> WelcomeScreen()));});
 
                     },

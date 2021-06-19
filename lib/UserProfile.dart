@@ -475,7 +475,7 @@ class _UserProfileState extends State<UserProfile> {
               items: ['ELECTRONICS','CLOTHING','HOME AND GARDENING','FILM','SPORTS'],
               hint: "choose the item category",
               popupItemDisabled: (String s) => s.startsWith('I'),
-              onChanged:(String data) {userProduct[index].type= data;},
+              onChanged:(String data) {categoryName= data;},
               selectedItem: userProduct[index].type),
         ),
         SimpleDialogItem(
@@ -496,6 +496,7 @@ class _UserProfileState extends State<UserProfile> {
               userProduct[index].price=customeController.text.toString();
               userProduct[index].name=customeController1.text.toString();
               userProduct[index].description=customeController2.text.toString();
+              addNewProduct(categoryName, customeController1.text, customeController2.text, customeController.text);
               setState(() {});
             }),
       ],
@@ -564,9 +565,10 @@ class _UserProfileState extends State<UserProfile> {
       'name': name,
       'description':description,
       'price':int.parse(price),
-      'image':''
+      'image':'',
+      'sellerId':id,
       }).then((value) {
-      value.id;
+      'pId': value.id;
       });
 
   }

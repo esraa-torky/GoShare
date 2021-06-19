@@ -93,7 +93,7 @@ class _SellerProfileState extends State<SellerProfile> {
                       padding: const EdgeInsets.all(10.0),
                       child: Opacity(
                         opacity: 0.4,
-                        //opening change photo/show photo menu
+                        //opening show photo
                         child: profilePicOptions(),
                       ),
                     ),
@@ -168,8 +168,7 @@ class _SellerProfileState extends State<SellerProfile> {
       submitButton: 'Submit',
       onCancelled: () => print('cancelled'),
       onSubmitted: (response) {
-        // rating.add(response.rating);
-        // comments.add(response.comment);
+
         addRating(response.rating, response.comment);
         setState(() {});
       },
@@ -232,13 +231,17 @@ class _SellerProfileState extends State<SellerProfile> {
                   radius: 20,
                   //ADD A PHOTO HERE!!
 
-                  backgroundImage: userWhoReview[index]['image'] !=null ? FileImage(File(userWhoReview[index]['image']))
-                      :userWhoReview[index]['image'].length != 0?NetworkImage(userWhoReview[index]['image'])
-                      :NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),),
+                  backgroundImage:
+                  // userWhoReview[index]['image'] !=null ? FileImage(File(userWhoReview[index]['image']))
+                  //     :userWhoReview[index]['image'].length != 0?NetworkImage(userWhoReview[index]['image'])
+                  //     :
+                  NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),),
                     Column(children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text(userWhoReview[index]['user_name'].toString(),style: TextStyle(color:Colors.green,fontWeight: FontWeight.bold),),
+                        child: Text(
+                          userWhoReview[index]['user_name'].toString()
+                          ,style: TextStyle(color:Colors.green,fontWeight: FontWeight.bold),),
                       ),
 
                     ],)
@@ -280,37 +283,20 @@ class _SellerProfileState extends State<SellerProfile> {
 
   getReviews() async {
     final snapshot = await FirebaseFirestore.instance.collection('Users').doc(seller['uid']).collection('reviews').get();
-    if (snapshot.docs.length != 0) {
+
       allReviews=snapshot.docs.map((doc) => doc.data()).toList();
       CollectionReference users = FirebaseFirestore.instance.collection('Users');
-     if (userWhoReview.isEmpty){
-      for(var i =0;i<allReviews.length;i++){
-        users.doc(allReviews[i]['reviewerId']).get().then((value){
-          userWhoReview.add(value.data());
-      });
+      for (var i=0;i<=allReviews.length;i++){
+        users.doc(allReviews[i]['reviewerId']).get().then((value) =>
+            userWhoReview.add(value.data()));
+      }
 
-      }}
-     else {
-       for(var i =userWhoReview.length-1;i<allReviews.length;i++){
-         users.doc(allReviews[i]['reviewerId']).get().then((value){
-           userWhoReview.add(value.data());
-         });
 
-       }
-     }
       check=true;
       setState(()
       {
 
       });
-    }
-    else{
-      check=true;
-      setState(()
-      {
-
-      });
-    }
   }
 
   addRating(rate,review) async {
