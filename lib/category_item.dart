@@ -160,7 +160,7 @@ class _CategoryItemState extends State<CategoryItem> {
     QuerySnapshot querySnapshot = await type.get();
     // Get data from docs and convert map to List
     allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-    //print(allData);
+
 
     setState(()
     {

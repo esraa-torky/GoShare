@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:rating_dialog/rating_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:focused_menu/focused_menu.dart';
@@ -7,19 +9,30 @@ import 'package:flutter/material.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:go_share/Product.dart';
 import 'package:go_share/User.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'control.dart';
 import 'Product.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 var colors = creatingColors();
 class SellerProfile extends StatefulWidget {
   @override
-  _SellerProfileState createState() => _SellerProfileState();
+  Map seller;
+  SellerProfile({this.seller});
+  _SellerProfileState createState() => _SellerProfileState(seller: this.seller);
 }
 
 class _SellerProfileState extends State<SellerProfile> {
   @override
-  List comments=[];
-  List rating=[];
+  List allReviews=[];
+  List userWhoReview=[];
+  Map seller;
+  var check;
+  _SellerProfileState({this.seller});
+  void initState()
+  {
+    getReviews();
+    super.initState();
+  }
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -48,7 +61,8 @@ class _SellerProfileState extends State<SellerProfile> {
                         ],
                       )),
                 ),
-                listOfItemsList()
+              check !=null?listOfReviewsList()
+              : Center(child: CircularProgressIndicator())
               ],),
             ),
           ],
@@ -93,13 +107,13 @@ class _SellerProfileState extends State<SellerProfile> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal:10.0),
                           child: RichText(text: TextSpan(children: [
-                            TextSpan(text:'seller name ',
+                            TextSpan(text:seller['user_name'],
                               style: TextStyle(color: colors[2], fontSize: 15,fontWeight: FontWeight.bold),
                             ),]
                           ),),),
                        Padding(
                         padding: const EdgeInsets.symmetric(horizontal:10.0,vertical: 5.0),
-                        child: Text('seller@gmail.com',
+                        child: Text(seller['email'],
                           style: TextStyle(color: colors[2], fontSize: 12,),
                           ),
                           ),
@@ -107,7 +121,7 @@ class _SellerProfileState extends State<SellerProfile> {
                           padding: const EdgeInsets.symmetric(horizontal:10.0),
                           child: RichText(text: TextSpan(children: [
                             WidgetSpan(child: Icon(Icons.location_on_sharp,color: colors[0],size: 18,)),
-                            TextSpan(text:'pendik,istanbul',
+                            TextSpan(text:seller['city']+" "+seller['neighbourhood'],
                             style: TextStyle(color: Colors.blueGrey,fontSize:12,fontWeight: FontWeight.bold ))])),
                               )],
                               ),
@@ -138,8 +152,10 @@ class _SellerProfileState extends State<SellerProfile> {
     return CircleAvatar(
       radius: 40,
       //ADD A PHOTO HERE!!
-      child: Icon(Icons.account_circle,color: colors[2],size: 80,),
-      backgroundColor: Colors.transparent,
+     // child: Icon(Icons.account_circle,color: colors[2],size: 80,),
+      backgroundImage: seller['image'] !=null ? FileImage(File(seller['image']))
+          :seller['image'].length != 0?NetworkImage(seller['image'])
+          :NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),
     );
   }
 
@@ -152,8 +168,9 @@ class _SellerProfileState extends State<SellerProfile> {
       submitButton: 'Submit',
       onCancelled: () => print('cancelled'),
       onSubmitted: (response) {
-        rating.add(response.rating);
-        comments.add(response.comment);
+        // rating.add(response.rating);
+        // comments.add(response.comment);
+        addRating(response.rating, response.comment);
         setState(() {});
       },
     );
@@ -181,14 +198,14 @@ class _SellerProfileState extends State<SellerProfile> {
     print(rating);
     },);
   }
-  Container listOfItemsList(){
+  Container listOfReviewsList(){
     return Container(
       color: Colors.white,
 
       child: ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
-          itemCount: rating.length,
+          itemCount: allReviews.length,
           itemBuilder: (BuildContext context,int index ){
             return GridTile(child: itemList(index));
           },
@@ -214,12 +231,14 @@ class _SellerProfileState extends State<SellerProfile> {
                   CircleAvatar(
                   radius: 20,
                   //ADD A PHOTO HERE!!
-                  child: Icon(Icons.account_circle,color: colors[2],size: 40,),
-                  backgroundColor: Colors.transparent,),
+
+                  backgroundImage: userWhoReview[index]['image'] !=null ? FileImage(File(userWhoReview[index]['image']))
+                      :userWhoReview[index]['image'].length != 0?NetworkImage(userWhoReview[index]['image'])
+                      :NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),),
                     Column(children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text('User name',style: TextStyle(color:Colors.green,fontWeight: FontWeight.bold),),
+                        child: Text(userWhoReview[index]['user_name'].toString(),style: TextStyle(color:Colors.green,fontWeight: FontWeight.bold),),
                       ),
 
                     ],)
@@ -230,7 +249,7 @@ class _SellerProfileState extends State<SellerProfile> {
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: RatingBarIndicator(
-                  rating: rating[index].toDouble(),
+                  rating: allReviews[index]['rating'].toDouble(),
                   itemBuilder: (context, index) => Icon(
                     Icons.star,
                     color: Colors.amber,
@@ -242,7 +261,7 @@ class _SellerProfileState extends State<SellerProfile> {
               ),
               Padding(
                 padding: const EdgeInsets.all(4.0),
-                child: Text(comments[index]),
+                child: Text(allReviews[index]['review']),
               )
             ],
           ),)
@@ -258,6 +277,57 @@ class _SellerProfileState extends State<SellerProfile> {
       backgroundColor: Colors.transparent,
     );
   }
+
+  getReviews() async {
+    final snapshot = await FirebaseFirestore.instance.collection('Users').doc(seller['uid']).collection('reviews').get();
+    if (snapshot.docs.length != 0) {
+      allReviews=snapshot.docs.map((doc) => doc.data()).toList();
+      CollectionReference users = FirebaseFirestore.instance.collection('Users');
+     if (userWhoReview.isEmpty){
+      for(var i =0;i<allReviews.length;i++){
+        users.doc(allReviews[i]['reviewerId']).get().then((value){
+          userWhoReview.add(value.data());
+      });
+
+      }}
+     else {
+       for(var i =userWhoReview.length-1;i<allReviews.length;i++){
+         users.doc(allReviews[i]['reviewerId']).get().then((value){
+           userWhoReview.add(value.data());
+         });
+
+       }
+     }
+      check=true;
+      setState(()
+      {
+
+      });
+    }
+    else{
+      check=true;
+      setState(()
+      {
+
+      });
+    }
+  }
+
+  addRating(rate,review) async {
+    await SharedPreferences.getInstance().then((value){
+      var id  = value.getString('userID');
+      FirebaseFirestore.instance.collection('Users').doc(seller['uid'])
+          .collection('reviews').add({
+        'reviewerId':id,
+        'rating':rate,
+        'review':review,
+      });
+      getReviews();
+      setState(() {
+      });
+    }
+    );}
+
 }
 List creatingColors() {
   var colors = [];

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:go_share/category_item.dart';
 import 'package:go_share/chat.dart';
+import 'package:go_share/sellerProfile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Item extends StatefulWidget {
@@ -122,13 +123,25 @@ class _ItemState extends State<Item> {
                       ),
                     ),
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: CircleAvatar(backgroundImage:
-                    seller['image'] !=null ? FileImage(File(seller['image']))
-                        :seller['image'].length != 0?NetworkImage(seller['image'])
-                        :NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'
-                    )
+                    child: TextButton(
+                      onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return SellerProfile(seller: seller,);
+                            },
+                          ),
+                        );
+                      },
+                      child: CircleAvatar(backgroundImage:
+                      seller['image'] !=null ? FileImage(File(seller['image']))
+                          :seller['image'].length != 0?NetworkImage(seller['image'])
+                          :NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'
+                      )
 
-                    ,backgroundColor: Colors.transparent,
+                      ,backgroundColor: Colors.transparent,
+                      ),
                     ),
                   ),
                   SizedBox(width: 20,),
@@ -140,7 +153,7 @@ class _ItemState extends State<Item> {
                     ),
                     ),
                      RatingBar.builder(
-                       initialRating: 3,
+                       initialRating: seller['rating'].toDouble(),
                        minRating: 1,
                        itemSize: 15,
                        direction: Axis.horizontal,
@@ -193,6 +206,7 @@ class _ItemState extends State<Item> {
       user.doc(itemDataMap['sellerId']).get().then((value)
       {
         seller= value.data();
+        print(seller);
         setState(() {
           });
       }).catchError((e)

@@ -142,6 +142,7 @@ class _BodyState extends State<Body> {
           'uid':uid,
           'image':'',
           'points': 100,
+          'rating':5.0,
         }).then((value)
     {
       Navigator.push(context, MaterialPageRoute(builder: (ctx)=>LoginScreen()));

@@ -13,14 +13,19 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
   String id1,id2;
   Map reciver;
+  List massages=[];
+  var chack;
   _ChatState(this.reciver);
   @override
-  // void initState()
-  // {
-  //   getUserId();
-  //   super.initState();
-  // }
+  void initState()
+  {
+    getMassage();
+    super.initState();
+  }
+  TextEditingController customeController=TextEditingController();
   Widget build(BuildContext context) {
+    this.id2=reciver['uid'];
+
     return// reciverName != null?
     Scaffold(
       appBar: AppBar(
@@ -44,20 +49,21 @@ class _ChatState extends State<Chat> {
           ],
         ),
       ),
-      body: Padding(
+      body: chack!=null? Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children:<Widget> [
             Expanded(child: ListView.builder(
-                itemCount: 10,
+                itemCount: massages.length,
                 scrollDirection: Axis.vertical,
-                itemBuilder: (context,index) =>messagebody()
+                itemBuilder: (context,index) =>messagebody(index)
             ),
             ),
             Row(
               children:<Widget> [
                 Expanded(
                   child: TextFormField(
+                    controller: customeController,
                       cursorColor: Colors.green,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(8),
@@ -73,6 +79,7 @@ class _ChatState extends State<Chat> {
                             borderSide: BorderSide(width: 2,color: Colors.green)
                         ),
                       ),
+
                       validator: (name){
                         if(name.isEmpty)
                         {
@@ -81,55 +88,54 @@ class _ChatState extends State<Chat> {
                       }
                   ),
                 ),
-                IconButton(icon: Icon(Icons.send,color: Colors.green,))
+                IconButton(icon: Icon(Icons.send,color: Colors.green,),
+                  onPressed: (){
+                  sendMassage(customeController.text);
+                },
+                )
               ],
             )
           ],
         ),
-      ),
+      ): Center(child: CircularProgressIndicator()),
     );//: Center(child: CircularProgressIndicator());
   }
-  // sendMassage(){
-  //
-  // }
-  // getMassage(){
-  //
-  // }
-  // getUserId() async
-  // {
-  //
-  //   await SharedPreferences.getInstance().then((value)
-  //   {
-  //     id1 = value.getString('userID');
-  //
-  //   });
-  // }
-  // getUser2Info() async
-  // {
-  //
-  //   CollectionReference users = FirebaseFirestore.instance.collection('Users');
-  //   {
-  //
-  //     id2 = 'vYeHVPY1hWMC7N30sdXeoZA8YbI2';
-  //     users.doc(id2).get().then((value)
-  //     {
-  //       reciverName= value.data();
-  //       setState(() {
-  //
-  //       });
-  //     }).catchError((e)
-  //     {
-  //       print('-------> error ${e.toString()}');
-  //     });
-  //   };
-  //}
-  Widget messagebody()=>
+  sendMassage(massage) async {
+    CollectionReference chat = FirebaseFirestore.instance.collection('chats');
+    DateTime now = DateTime.now();
+    await SharedPreferences.getInstance().then((value)
+    {
+      id1 = value.getString('userID');
+      FirebaseFirestore.instance.collection('chats').doc(id1)
+          .collection('/$id2').add({
+            'massage':massage,
+            'time':now.hour.toString() + ":" + now.minute.toString(),
+      }
+      );
+      setState(() {
+        getMassage();
+      });
+    });
+  }
+  getMassage() async {
+    CollectionReference chat = FirebaseFirestore.instance.collection('chats');
+    await SharedPreferences.getInstance().then((value)
+    async {
+      id1 = value.getString('userID');
+      final snapshot= await FirebaseFirestore.instance.collection('chats').doc(id1).collection(id2).get();
+      massages=snapshot.docs.map((doc) => doc.data()).toList();
+      chack=true;
+      setState(() {
+      });
+  });}
+
+  Widget messagebody(index)=>
       Padding(
-        padding: const EdgeInsets.all(18.0),
+        padding: const EdgeInsets.all(8.0),
         child: Container(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm'),
+              child: Text(massages[index]['massage']),
             ),
             decoration: BoxDecoration(
                 color: Colors.green[100],
