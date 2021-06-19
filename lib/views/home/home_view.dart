@@ -4,7 +4,7 @@ import 'package:go_share/ContactUs.dart';
 import 'package:go_share/common/widgets/search_widget.dart';
 import 'package:go_share/common/widgets/title_widget.dart';
 import 'package:go_share/providers/home/home_provider.dart';
-import 'package:go_share/views/home/layouts/category_list.dart';
+//import 'package:go_share/views/home/layouts/category_list.dart';
 import 'package:provider/provider.dart';
 
 import '../../UserProfile.dart';
@@ -97,10 +97,10 @@ class HomeView extends StatelessWidget {
                 search: home.searchCategories,
 
               ),
-              Expanded(
-                  child: CategoryList(
-                categories: home.filteredCategories,
-              )),
+              // Expanded(
+              //     child: CategoryList(
+              //   categories: home.filteredCategories,
+              // )),
             ],
           ),
         ),

@@ -254,14 +254,5 @@ class _EditProfilePageState extends State<EditProfilePage> {
       ),
     );
   }
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
-  // getCurrentUser() async {
-  //   final FirebaseUser user = _auth.currentUser;
-  //   final uid = user.uid;
-  //   print(uid);
-  //   //print(uemail);
-  // }
- changeUserName(){
 
- }
 }

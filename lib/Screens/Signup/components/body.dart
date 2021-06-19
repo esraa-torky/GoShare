@@ -1,35 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_share/Home_page.dart';
 import 'package:go_share/Screens/Login/login_screen.dart';
 import 'package:go_share/Screens/Signup/components/background.dart';
 import 'package:go_share/Screens/Signup/components/or_divider.dart';
 import 'package:go_share/Screens/Signup/components/social_icon.dart';
-import 'package:go_share/UserProfile.dart';
 import 'package:go_share/components/already_have_an_account_acheck.dart';
 import 'package:go_share/components/rounded_button.dart';
 import 'package:go_share/components/rounded_input_field.dart';
 import 'package:go_share/components/rounded_password_field.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_share/views/home/home_view.dart';
 
-import 'package:toast/toast.dart';
-
-class Body extends StatefulWidget {
+class Body extends StatelessWidget {
   @override
-  _BodyState createState() => _BodyState();
-}
+  bool isName = false;
+  bool isSurname = false;
+  bool isPassword = false;
+  bool isEmail = false;
 
-class _BodyState extends State<Body> {
-  String email;
-  String password;
-  String image,neighbourhood,name,surname,city;
-
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
         child: Column(
@@ -37,63 +27,78 @@ class _BodyState extends State<Body> {
           children: <Widget>[
             Text(
               "SIGNUP",
-              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,color: Colors.green),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: size.height * 0.03,
+              child: ListTile(
+                tileColor: Colors.amber,
+              ),
+            ),
+            SizedBox(
+              height: size.height * 0.03,
+              child: ListTile(
+                tileColor: Colors.green,
+              ),
             ),
             RoundedInputField(
-              hintText: "Name*",
+              hintText: "Name",
               onChanged: (value) {
-                name=value;
+                if (!value.isEmpty) {
+                  isName = true;
+                }
               },
             ),
             RoundedInputField(
-              hintText: "Surname*",
+              hintText: "Surname",
               onChanged: (value) {
-                surname=value;
+                if (!value.isEmpty) {
+                  isSurname = true;
+                }
               },
             ),
             RoundedInputField(
-              icon: Icons.email_rounded,
-              hintText: "Email*",
+              hintText: "Email",
               onChanged: (value) {
-                this.email = value;
+                if (!value.isEmpty) {
+                  isEmail = true;
+                }
               },
             ),
             RoundedInputField(
               hintText: "City",
-              onChanged: (value) {
-                city=value;
-              },
+              onChanged: (value) {},
             ),
             RoundedInputField(
               hintText: "Neighbourhood",
-              onChanged: (value) {
-                neighbourhood=value;
-              },
+              onChanged: (value) {},
             ),
             RoundedPasswordField(
               onChanged: (value) {
-                this.password = value;
+                if (!value.isEmpty) {
+                  isPassword = true;
+                }
               },
             ),
             RoundedButton(
               color: Colors.green.shade400,
               text: "SIGNUP",
               press: () {
-                FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password)
-                    .then((value) async {
-                  // SharedPreferences prefs = await SharedPreferences.getInstance();
-                  // await prefs.setString('userID', value.user.uid);
-                  setState(() {
-
-                    addUsers(email, password,name,surname,neighbourhood,city,value.user.uid);
-                  });
-                }).catchError((e) {
-                  Toast.show(e.toString(), context,
-                      duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-                });
+                if ((isName && isSurname && isEmail && isPassword) == false) {
+                  ErrorMessage(context).then((onValue) {});
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return HomeView();
+                      },
+                    ),
+                  );
+                }
               },
             ),
-            SizedBox(height: 20),
+            SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
               login: false,
               press: () {
@@ -131,25 +136,29 @@ class _BodyState extends State<Body> {
     );
   }
 
-  void addUsers(String email, String password, String name,String surname,String neighbourhood,String city,String uid) {
-    CollectionReference users = FirebaseFirestore.instance.collection('Users');
-    users..doc(uid).set(
-        {
-          'user_name':name+" "+surname,
-          'email':email,
-          'city':city,
-          'neighbourhood':neighbourhood,
-          'uid':uid,
-          'image':'',
-          'points': 100,
-        }).then((value)
-    {
-      Navigator.push(context, MaterialPageRoute(builder: (ctx)=>LoginScreen()));
-
-    }).catchError((e)
-    {
-      Toast.show(e.toString(), context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
-    });
+  ErrorMessage(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text(
+                      'Please do not forget to enter user name, surname, email or password'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Approve'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
   }
-  }
-
+}

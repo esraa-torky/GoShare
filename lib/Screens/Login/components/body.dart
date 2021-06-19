@@ -65,23 +65,26 @@ class _BodyState extends State<Body> {
                       await prefs.setString('userID', value.user.uid);
                    });
                 } on FirebaseAuthException catch (e) {
-                  if (e.code == 'user-not-found') {
-                    print('No user found for that email.');
-                  } else if (e.code == 'wrong-password') {
-                    print('Wrong password provided for that user.');
+                  if (e.code == 'user-not-found' || e.code == 'wrong-password') {
+                    WrongPasswordOrEmailMessage(context).then((onValue) {});
+                  }
+                  else if(email == null || password == null){
+                    ErrorMessage(context).then((onValue) {});
+                  }
+
+                  else{
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return HomePage();
+                        },
+                      ),
+                    );
+
                   }
                 }
 
-
-                
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return HomePage();
-                    },
-                  ),
-                );
               },
             ),
             SizedBox(height: size.height * 0.03),
@@ -101,6 +104,59 @@ class _BodyState extends State<Body> {
         ),
       ),
     );
+  }
+
+  ErrorMessage(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text(
+                      'Please do not forget to enter email or password'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Approve'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  WrongPasswordOrEmailMessage(BuildContext context){
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text(
+                      'Wrong email or password!'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Approve'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
+
   }
 }
 
