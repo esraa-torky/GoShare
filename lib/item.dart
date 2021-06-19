@@ -1,15 +1,30 @@
+import 'dart:io';
+
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:go_share/category_item.dart';
+import 'package:go_share/chat.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Item extends StatefulWidget {
   @override
-  _ItemState createState() => _ItemState();
+  Map item;
+  Item({this.item});
+  _ItemState createState() => _ItemState(itemDataMap: item);
 }
 
 class _ItemState extends State<Item> {
+  Map itemDataMap,seller;
+
+  _ItemState({this.itemDataMap,});
+  void initState()
+  {
+    getData();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +42,8 @@ class _ItemState extends State<Item> {
           );
         }, icon: Icon(Icons.arrow_back,color: Colors.black,),),
       )
-      ,body: SingleChildScrollView(
+      ,body: seller != null?
+    SingleChildScrollView(
          child: Padding(
            padding: const EdgeInsets.all(25.0),
            child: Column(
@@ -55,12 +71,15 @@ class _ItemState extends State<Item> {
                ),
               ),
               SizedBox(height: 15),
-              Text('Electric Mountain Bike',style: TextStyle(
+              Text(itemDataMap['name']
+                ,style: TextStyle(
                   color: Colors.grey,fontSize: 14
               ),
               ),
               SizedBox(height: 10),
-              Text('\$ 520.66',style: TextStyle(
+              Text(itemDataMap['points'].toString()+' \$'
+                ,
+                style: TextStyle(
                   color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18
               ),
               ),
@@ -76,7 +95,7 @@ class _ItemState extends State<Item> {
               ),
               ),
               SizedBox(height: 8),
-              Text('Ride in style with the Hyper E-Ride Electric Hybrid Bike, 36V Battery. This 26" electric bike includes front and rear V-brakes for enhanced stopping power and front suspension forks for a comfortable ride. It also has an integrated flush-mounted battery and a rear hub brushless motor. The battery charges in around 4 hours and lasts for about 20 miles.',
+              Text(itemDataMap['description'],
                 style: TextStyle(
                   color: Colors.grey[500],fontSize: 14
                 ), textDirection: TextDirection.ltr
@@ -103,15 +122,20 @@ class _ItemState extends State<Item> {
                       ),
                     ),
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: CircleAvatar(backgroundImage: NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),
-                    backgroundColor: Colors.transparent,
+                    child: CircleAvatar(backgroundImage:
+                    seller['image'] !=null ? FileImage(File(seller['image']))
+                        :seller['image'].length != 0?NetworkImage(seller['image'])
+                        :NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'
+                    )
+
+                    ,backgroundColor: Colors.transparent,
                     ),
                   ),
                   SizedBox(width: 20,),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children:<Widget> [
-                    Text('User Name',style: TextStyle(
+                    Text(seller['user_name'].toString(),style: TextStyle(
                         color: Colors.black,fontSize: 14
                     ),
                     ),
@@ -137,6 +161,16 @@ class _ItemState extends State<Item> {
                   ),
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   child: RaisedButton.icon(
+                    onPressed: () async {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return Chat(seller);
+                          },
+                        ),
+                      );
+                    },
                     disabledColor: Colors.green,
                       icon:Icon(Icons.chat,color: Colors.white,),
                       label: Text("Contact Me",style: TextStyle(
@@ -147,7 +181,24 @@ class _ItemState extends State<Item> {
             ],
            ),
          ),
-      )
+      ): Center(child: CircularProgressIndicator())
     );
+
+  }
+  getData() async
+  {
+    CollectionReference user = FirebaseFirestore.instance.collection('Users');
+
+
+      user.doc(itemDataMap['sellerId']).get().then((value)
+      {
+        seller= value.data();
+        setState(() {
+          });
+      }).catchError((e)
+      {
+        print('-------> error ${e.toString()}');
+      });
+
   }
 }

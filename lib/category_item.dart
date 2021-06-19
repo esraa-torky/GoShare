@@ -1,13 +1,28 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_share/Home_page.dart';
 import 'package:go_share/item.dart';
 
 class CategoryItem extends StatefulWidget {
   @override
-  _CategoryItemState createState() => _CategoryItemState();
+
+  String name;
+  CategoryItem({this.name});
+  _CategoryItemState createState() => _CategoryItemState(name:name,);
 }
 
 class _CategoryItemState extends State<CategoryItem> {
+  var allData;
+  String name;
+ _CategoryItemState({this.name});
+  void initState()
+  {
+    getData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,13 +76,13 @@ class _CategoryItemState extends State<CategoryItem> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
+      body: allData != null? SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children:<Widget> [
-              Text('Category name',style: TextStyle(
+              Text(this.name,style: TextStyle(
                 fontWeight: FontWeight.bold,fontSize: 20
               ),
               ),
@@ -75,18 +90,19 @@ class _CategoryItemState extends State<CategoryItem> {
               new GridView.builder(
                 shrinkWrap: true,
                 physics: ScrollPhysics(),
-                itemCount: 10,
+                itemCount: allData.length,
                 scrollDirection: Axis.vertical,
                 gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2,crossAxisSpacing: 10,mainAxisSpacing: 12,),
-                itemBuilder: (BuildContext context, int index) => itemcard()
+                itemBuilder: (BuildContext context, int index) => itemcard(index)
               )
             ],
           ),
         ),
-      ),
+      )
+            : Center(child: CircularProgressIndicator()),
     );
   }
-  Widget itemcard()=>Container(
+  Widget itemcard(index)=>Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(18.0),
       color: Colors.white,
@@ -105,18 +121,19 @@ class _CategoryItemState extends State<CategoryItem> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children:<Widget> [
-          Expanded(child: Image.network('https://www.narscosmetics.eu/dw/image/v2/BCMQ_PRD/on/demandware.static/-/Sites-itemmaster_NARS/default/dw773e6329/hi-res/NARS_FA19_Lipstick_Soldier_LPS_Raw_Seduction_Satin_GLBL_B_square.jpg?sw=856&sh=750&sm=fit',fit: BoxFit.fitWidth,)),
+          Expanded(child: Image.file(File(allData[index].toString()))),
+          //Image.network('https://www.narscosmetics.eu/dw/image/v2/BCMQ_PRD/on/demandware.static/-/Sites-itemmaster_NARS/default/dw773e6329/hi-res/NARS_FA19_Lipstick_Soldier_LPS_Raw_Seduction_Satin_GLBL_B_square.jpg?sw=856&sh=750&sm=fit',fit: BoxFit.fitWidth,)),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children:<Widget> [
-                Text('Category name',style: TextStyle(
+                Text(allData[index]['name'],style: TextStyle(
                     fontWeight: FontWeight.bold,fontSize: 14
                 ),
                 ),
-                Text('20 Points',style: TextStyle(
+                Text(allData[index]['points'].toString()+' points',style: TextStyle(
                     color: Colors.grey,fontSize: 12
                 ),
                 ),
@@ -130,11 +147,25 @@ class _CategoryItemState extends State<CategoryItem> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return Item();
+              return Item(item: allData[index],);
             },
           ),
         );
       },
     ),
   );
+  getData() async
+  {
+    CollectionReference type = FirebaseFirestore.instance.collection('CLOTHES');
+    QuerySnapshot querySnapshot = await type.get();
+    // Get data from docs and convert map to List
+    allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    //print(allData);
+
+    setState(()
+    {
+
+    });
+  }
 }
+

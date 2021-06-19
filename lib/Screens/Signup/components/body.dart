@@ -81,9 +81,10 @@ class _BodyState extends State<Body> {
               press: () {
                 FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password)
                     .then((value) async {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  await prefs.setString('userID', value.user.uid);
+                  // SharedPreferences prefs = await SharedPreferences.getInstance();
+                  // await prefs.setString('userID', value.user.uid);
                   setState(() {
+
                     addUsers(email, password,name,surname,neighbourhood,city,value.user.uid);
                   });
                 }).catchError((e) {
@@ -143,7 +144,7 @@ class _BodyState extends State<Body> {
           'points': 100,
         }).then((value)
     {
-      Navigator.push(context, MaterialPageRoute(builder: (ctx)=>HomePage()));
+      Navigator.push(context, MaterialPageRoute(builder: (ctx)=>LoginScreen()));
 
     }).catchError((e)
     {
