@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'components/rounded_input_field.dart';
 class Chat extends StatefulWidget {
   @override
   Map reciver;
@@ -12,6 +14,8 @@ class Chat extends StatefulWidget {
 
 class _ChatState extends State<Chat> {
   String id1,id2;
+  int points1,points2;
+  int point;
   Map reciver;
   List massages=[];
   var chack;
@@ -35,8 +39,7 @@ class _ChatState extends State<Chat> {
         title: Row(
           children:<Widget> [
             CircleAvatar(backgroundColor: Colors.transparent,
-              backgroundImage: reciver['image'] !=null ? FileImage(File(reciver['image']))
-                  :reciver['image'].length != 0?NetworkImage(reciver['image'])
+              backgroundImage: reciver['image'].length != 0?NetworkImage(reciver['image'])
                   :NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),
 
             ),
@@ -46,6 +49,16 @@ class _ChatState extends State<Chat> {
                 fontSize: 16
             ),
             ),
+          Align(
+              alignment: Alignment.centerRight,
+              child: IconButton(icon:Icon(Icons.check_box_sharp), onPressed: () {
+
+
+                showDialog(context: context, builder:(context) {
+                  return transferPoints(context);
+                });
+              }
+              ))
           ],
         ),
       ),
@@ -131,7 +144,6 @@ class _ChatState extends State<Chat> {
       final snapshot= await FirebaseFirestore.instance.collection('Users').doc(id1).collection('chats').doc(id2).collection('massage').get();
       print(snapshot.docs);
       massages=snapshot.docs.map((doc) => doc.data()).toList();
-      //massages.sort((a,b){(a['time']).compareTo(b['time']);});
       chack=true;
       setState(() {
       });});
@@ -189,5 +201,120 @@ class _ChatState extends State<Chat> {
         ),
       );
     }
+  }
+error(context){
+  return SimpleDialog(
+    title: Text('Error',style: TextStyle(color: Colors.green[400]),),
+    children: [
+    SimpleDialogItem(
+    text: 'Points',
+    size: 40,
+    child: Text('You Don\'t Have Enough points'),
+  ),
+  MaterialButton(elevation: 5.0,
+  child: Text('Okay',style: TextStyle(color: Colors.green[400]),),
+  onPressed: (){
+    Navigator.of(context).pop();
+  })]);
+}
+transferPoints(context){
+  return SimpleDialog(
+    title: Text('Edit product info',style: TextStyle(color: Colors.green[400]),),
+    children: [
+      SimpleDialogItem(
+        text: 'Points',
+        size: 40,
+        child: TextField(
+          onChanged: (value) {
+            point=int.parse( value);
+          },
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText:'0',),
+        ),
+      ),
+      MaterialButton(elevation: 5.0,
+          child: Text('Transfer',style: TextStyle(color: Colors.green[400]),),
+          onPressed: () async {
+            Map sender,r;
+            await FirebaseFirestore.instance.collection('Users').doc(reciver['uid']).get().then((value)
+
+            {  r=value.data();
+              points2 =r['points'];
+            });
+
+             await FirebaseFirestore.instance.collection('Users').doc(id1).get().then((value) async {
+            sender= value.data();
+            points1=sender['points'];
+            if(points1>point){
+            points1-=point;
+            points2+=point;
+            await FirebaseFirestore.instance.collection('Users').doc(id1).update(
+            {
+            'points':points1,
+            }
+            );
+            await FirebaseFirestore.instance.collection('Users').doc(id2).update(
+            {
+            'points':points2,
+            }
+            );
+            }
+            else{
+              showDialog(context: context, builder:(context) {
+                return error(context);
+
+              });
+              setState(() {});
+                  Navigator.of(context).pop();
+            }
+            });
+            setState(() {});
+            Navigator.of(context).pop();}
+          )
+    ],
+  );
+}
+
+}
+class SimpleDialogItem extends StatelessWidget {
+  const SimpleDialogItem(
+      {Key key, this.icon, this.color, this.text, this.onPressed, this.child, this.size})
+      : super(key: key);
+
+  final IconData icon;
+  final Color color;
+  final String text;
+  final VoidCallback onPressed;
+  final Widget child;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return SimpleDialogOption(
+      onPressed: onPressed,
+      child: Column(
+          children: [Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(text,
+                  style: TextStyle(color: Colors.green[400],
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),),
+              ),
+
+            ],
+          ),
+            Container(
+              height: size,
+              child: child,
+            ),
+          ]
+      ),
+    );
   }
 }
