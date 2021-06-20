@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'chat.dart';
 
 class ChatsScreen extends StatefulWidget {
   @override
@@ -10,6 +13,7 @@ class ChatsScreen extends StatefulWidget {
 
 class _ChatsScreenState extends State<ChatsScreen> {
   @override
+  String id;
   List allChats=[];
   List allConections=[];
   void initState()
@@ -45,7 +49,18 @@ class _ChatsScreenState extends State<ChatsScreen> {
     );
   }
   itemList(int index){
+    if(allChats[index]['uid']!=id){
     return TextButton(
+      onPressed:
+      (){Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return  Chat(allChats[index]);
+            },
+          ),
+        );
+      },
       child: Container(child:Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,11 +71,9 @@ class _ChatsScreenState extends State<ChatsScreen> {
               children: [
                 CircleAvatar(
                   radius: 25,
-                  //ADD A PHOTO HERE!!
                   backgroundImage:
-                  // userWhoReview[index]['image'] !=null ? FileImage(File(userWhoReview[index]['image']))
-                  //     :userWhoReview[index]['image'].length != 0?NetworkImage(userWhoReview[index]['image'])
-                  //     :
+                  allChats[index]['image'].length != 0?NetworkImage(allChats[index]['image'])
+                      :
                   NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,15 +81,10 @@ class _ChatsScreenState extends State<ChatsScreen> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(//'user name'
-                      allConections[index]['user_name'].toString()
+                      allChats[index]['user_name'].toString()
                       ,style: TextStyle(color:Colors.green,fontWeight: FontWeight.bold,fontSize: 17,fontFamily: 'QuickSand'),),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                        'last massage'
-                    ),
-                  )
+
                 ],)
               ],
             ),
@@ -86,20 +94,26 @@ class _ChatsScreenState extends State<ChatsScreen> {
 
         ],
       ),),
-    );
+    );}
+    else{
+      return Container();
+    }
   }
   getChats() async {
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
     await SharedPreferences.getInstance().then((value)
-    {
-      var id = value.getString('userID');
-      users.doc(id).collection('chats').get().then((value)
-      {
-          value.docs.forEach((element) {
-            allChats.add(element.id);
-          });
+    async {
+      id = value.getString('userID');
+      print(id);
+      final snapshot = await FirebaseFirestore.instance.collection('Users').get();
+      allChats=snapshot.docs.map((doc) => doc.data()).toList();
           print(allChats);
-      });});
+
+    });
+    setState(() {
+    });
+
+
 }
 
 }

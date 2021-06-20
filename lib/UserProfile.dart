@@ -7,6 +7,7 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:full_screen_image/full_screen_image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Home_page.dart';
@@ -192,7 +193,13 @@ class _UserProfileState extends State<UserProfile> {
         menuItems: [
           FocusedMenuItem(title: Text('View profile picture'),
             trailingIcon: Icon(Icons.face,color: colors[2],),
-          ),
+            onPressed: () async {
+              await showDialog(
+                  context: context,
+                  builder: (_) => ImageDialog(userDataMap['image'])
+              );
+
+                }),
           FocusedMenuItem(title: Text('Change profile picture'),
             trailingIcon: Icon(Icons.image,color: colors[2],),
             onPressed: (){
@@ -636,6 +643,33 @@ class _UserProfileState extends State<UserProfile> {
 
 
 
+}
+
+class ImageDialog extends StatefulWidget {
+  @override
+  String image;
+  ImageDialog(this.image);
+  _ImageDialogState createState() => _ImageDialogState(this.image);
+}
+
+class _ImageDialogState extends State<ImageDialog> {
+  String image;
+  _ImageDialogState(this.image);
+  @override
+  Widget build(BuildContext context,) {
+    return Dialog(
+      child: Container(
+        width:  MediaQuery.of(context).size.width*0.5,
+        height:  MediaQuery.of(context).size.height*0.5,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: NetworkImage(image),
+                fit: BoxFit.cover
+            )
+        ),
+      ),
+    );
+  }
 }
 
 

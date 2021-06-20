@@ -26,7 +26,7 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     this.id2=reciver['uid'];
 
-    return// reciverName != null?
+    return
     Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.green[400],
@@ -38,7 +38,7 @@ class _ChatState extends State<Chat> {
               backgroundImage: reciver['image'] !=null ? FileImage(File(reciver['image']))
                   :reciver['image'].length != 0?NetworkImage(reciver['image'])
                   :NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),
-              //NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png',
+
             ),
 
             SizedBox(width: 12),
@@ -54,6 +54,7 @@ class _ChatState extends State<Chat> {
         child: Column(
           children:<Widget> [
             Expanded(child: ListView.builder(
+                reverse: true,
                 itemCount: massages.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context,index) =>messagebody(index)
@@ -67,7 +68,7 @@ class _ChatState extends State<Chat> {
                       cursorColor: Colors.green,
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.all(8),
-                          hintText: 'message',
+                          hintText: 'write your message here',
                           //fillColor: Colors.grey[100],
                           //filled: true,
                         focusedBorder: OutlineInputBorder(
@@ -130,23 +131,63 @@ class _ChatState extends State<Chat> {
       final snapshot= await FirebaseFirestore.instance.collection('Users').doc(id1).collection('chats').doc(id2).collection('massage').get();
       print(snapshot.docs);
       massages=snapshot.docs.map((doc) => doc.data()).toList();
+      //massages.sort((a,b){(a['time']).compareTo(b['time']);});
       chack=true;
       setState(() {
       });});
   }
 
-  Widget messagebody(index)=>
-      Padding(
+  Widget messagebody(index){
+    if (massages[index]['sender']==id1){
+      return Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Container(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(massages[index]['massage']),
-            ),
-            decoration: BoxDecoration(
-                color: Colors.green[100],
-                borderRadius: BorderRadius.circular(18.0,)
-            )
+        child: Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            width: MediaQuery.of(context).size.width*0.75,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    Align(alignment: Alignment.topLeft,
+                        child: Text(massages[index]['massage'])),
+                    Align(alignment: Alignment.bottomRight,
+                        child: Text(massages[index]['time'])),
+                  ],
+                ),
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.green[100],
+                  borderRadius: BorderRadius.circular(18.0,)
+              )
+          ),
+        ),
+      );}
+  else{
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Align(
+          alignment: Alignment.bottomLeft,
+          child: Container(
+              width: MediaQuery.of(context).size.width*0.5,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child:  Column(
+                  children: [
+                    Align(alignment: Alignment.topRight,
+                        child: Text(massages[index]['massage'])),
+                    Align(alignment: Alignment.bottomLeft,
+                        child: Text(massages[index]['time'])),
+                  ],
+                ),
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.green[100],
+                  borderRadius: BorderRadius.circular(18.0,)
+              )
+          ),
         ),
       );
+    }
+  }
 }

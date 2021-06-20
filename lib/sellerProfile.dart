@@ -19,47 +19,54 @@ class SellerProfile extends StatefulWidget {
 
 class _SellerProfileState extends State<SellerProfile> {
   @override
-  List allReviews=[];
-  List userWhoReview=[];
+  List allReviews = [];
+  List userWhoReview = [];
   Map seller;
   var check;
+
   _SellerProfileState({this.seller});
-  void initState()
-  {
+
+  void initState() {
     getReviews();
     super.initState();
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:PreferredSize(
-          preferredSize: Size.fromHeight(40.0), child:AppBar(iconTheme: IconThemeData(color: Colors.black),
-        bottomOpacity: 0.0,
-        elevation: 0.0,
-        backgroundColor: Colors.white,)),
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(40.0),
+          child: AppBar(iconTheme: IconThemeData(color: Colors.black),
+            bottomOpacity: 0.0,
+            elevation: 0.0,
+            backgroundColor: Colors.white,)),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Center(child: Column(children: [
-                Center(child: userInfo()),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal:15.0,vertical: 9),
-                  child: Container
-                    (alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Text('Rating and reviews',
-                    style: TextStyle(color: Colors.green,fontSize: 20,fontWeight: FontWeight.bold),),
-                          SizedBox(width: 10,)
-                          ,Icon(Icons.trending_up,size: 20,color: Colors.green[200],)
-                        ],
-                      )),
-                ),
-              check !=null?listOfReviewsList()
-              : Center(child: CircularProgressIndicator())
-              ],),
+              Center(child: userInfo()),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 15.0, vertical: 9),
+                child: Container
+                  (alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        Text('Rating and reviews',
+                          style: TextStyle(color: Colors.green,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),),
+                        SizedBox(width: 10,)
+                        , Icon(Icons.trending_up, size: 20, color: Colors
+                            .green[200],)
+                      ],
+                    )),
+              ),
+              check != null ? listOfReviewsList()
+                  : Center(child: CircularProgressIndicator())
+            ],),
             ),
           ],
         ),
@@ -67,23 +74,24 @@ class _SellerProfileState extends State<SellerProfile> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: colors[0],
         child: Icon(Icons.star_half_outlined),
-      onPressed: _showRatingAppDialog,),
+        onPressed: _showRatingAppDialog,),
     );
   }
+
   Container userInfo() {
     return Container(
       alignment: Alignment.topCenter,
       color: Colors.white,
       child: Card(
-      shape: RoundedRectangleBorder(
-      side: BorderSide(color: Colors.white70, width: 1),
-              borderRadius: BorderRadius.circular(10),),
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.white70, width: 1),
+          borderRadius: BorderRadius.circular(10),),
         child: Stack(
           children: [
-            Column (
+            Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children:<Widget>[
+                children: <Widget>[
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
@@ -101,56 +109,81 @@ class _SellerProfileState extends State<SellerProfile> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:10.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: RichText(text: TextSpan(children: [
-                            TextSpan(text:seller['user_name'],
-                              style: TextStyle(color: colors[2], fontSize: 15,fontWeight: FontWeight.bold),
-                            ),]
+                            TextSpan(text: seller['user_name'],
+                              style: TextStyle(color: colors[2],
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ]
                           ),),),
-                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal:10.0,vertical: 5.0),
-                        child: Text(seller['email'],
-                          style: TextStyle(color: colors[2], fontSize: 12,),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 5.0),
+                          child: Text(seller['email'],
+                            style: TextStyle(color: colors[2], fontSize: 12,),
                           ),
-                          ),
-                          Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:10.0),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: RichText(text: TextSpan(children: [
-                            WidgetSpan(child: Icon(Icons.location_on_sharp,color: colors[0],size: 18,)),
-                            TextSpan(text:seller['city']+" "+seller['neighbourhood'],
-                            style: TextStyle(color: Colors.blueGrey,fontSize:12,fontWeight: FontWeight.bold ))])),
-                              )],
-                              ),
+                            WidgetSpan(child: Icon(
+                              Icons.location_on_sharp, color: colors[0],
+                              size: 18,)),
+                            TextSpan(text: seller['city'] + " " +
+                                seller['neighbourhood'],
+                                style: TextStyle(color: Colors.blueGrey,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold))
+                          ])),
+                        )
+                      ],
+                    ),
                   )
-                  ,SizedBox(height: 10,),]),
+                  , SizedBox(height: 10,),
+                ]),
 
           ],
         ),
       ),
     );
   }
-  FocusedMenuHolder profilePicOptions(){
+
+  FocusedMenuHolder profilePicOptions() {
     return FocusedMenuHolder(
-      menuWidth:  MediaQuery.of(context).size.width*0.5,
+      menuWidth: MediaQuery
+          .of(context)
+          .size
+          .width * 0.5,
       openWithTap: true,
       //NOT DONE YET !!!!
       menuItems: [
         FocusedMenuItem(title: Text('View profile picture'),
-          trailingIcon: Icon(Icons.face,color: colors[2],),
+            trailingIcon: Icon(Icons.face, color: colors[2],),
+            onPressed: () async {
+              await showDialog(
+                  context: context,
+                  builder: (_)
+              =>
+                  ImageDialog(seller['image'])
+              );
+            }
         ),
       ],
-      onPressed: (){},
+      onPressed: () {},
       blurBackgroundColor: colors[2],
       child: profilePic(),
     );
   }
-  CircleAvatar profilePic(){
+
+  CircleAvatar profilePic() {
     return CircleAvatar(
       radius: 40,
-      //ADD A PHOTO HERE!!
-     // child: Icon(Icons.account_circle,color: colors[2],size: 80,),
-      backgroundImage: seller['image'].length != 0?NetworkImage(seller['image'])
-          :NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),
+      backgroundImage: seller['image'].length != 0 ? NetworkImage(
+          seller['image'])
+          : NetworkImage(
+          'https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),
     );
   }
 
@@ -163,7 +196,6 @@ class _SellerProfileState extends State<SellerProfile> {
       submitButton: 'Submit',
       onCancelled: () => print('cancelled'),
       onSubmitted: (response) {
-
         addRating(response.rating, response.comment);
         setState(() {});
       },
@@ -176,138 +208,164 @@ class _SellerProfileState extends State<SellerProfile> {
     );
   }
 
-  RatingBar ratingBar(){
+  RatingBar ratingBar() {
     return RatingBar.builder(
-        initialRating: 0,
-        minRating: 1,
-        direction: Axis.horizontal,
-        allowHalfRating: false,
-        itemCount: 5,
-        itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-          itemBuilder: (context, _) => Icon(
-    Icons.star,
-    color: Colors.amber,
-    ),
-    onRatingUpdate: (rating) {
-    print(rating);
-    },);
+      initialRating: 0,
+      minRating: 1,
+      direction: Axis.horizontal,
+      allowHalfRating: false,
+      itemCount: 5,
+      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+      itemBuilder: (context, _) =>
+          Icon(
+            Icons.star,
+            color: Colors.amber,
+          ),
+      onRatingUpdate: (rating) {
+        print(rating);
+      },);
   }
-  Container listOfReviewsList(){
+
+  Container listOfReviewsList() {
     return Container(
       color: Colors.white,
 
       child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: allReviews.length,
-          itemBuilder: (BuildContext context,int index ){
-            return GridTile(child: itemList(index));
-          },
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: allReviews.length,
+        itemBuilder: (BuildContext context, int index) {
+          return GridTile(child: itemList(index));
+        },
       ),
     );
   }
-  itemList(int index){
+
+  itemList(int index) {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Card(
-          shape: RoundedRectangleBorder(
-              side: new BorderSide(color: Colors.green, width: 1.0),
-              borderRadius: BorderRadius.circular(4.0)),
-          child: Container(child:Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Row(
-                  children: [
-                  CircleAvatar(
-                  radius: 20,
-                  //ADD A PHOTO HERE!!
+            shape: RoundedRectangleBorder(
+                side: new BorderSide(color: Colors.green, width: 1.0),
+                borderRadius: BorderRadius.circular(4.0)),
+            child: Container(child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 20,
+                        //ADD A PHOTO HERE!!
 
-                  backgroundImage: userWhoReview[index]['image'].length != 0?NetworkImage(userWhoReview[index]['image'])
-                      :
-                  NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),),
-                    Column(children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          userWhoReview[index]['user_name'].toString()
-                          ,style: TextStyle(color:Colors.green,fontWeight: FontWeight.bold),),
-                      ),
+                        backgroundImage: //userWhoReview[index]['image'].length != 0?NetworkImage(userWhoReview[index]['image'])
+                        // :
+                        NetworkImage(
+                            'https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),),
+                      Column(children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('user name'
+                            // userWhoReview[index]['user_name'].toString()
+                            , style: TextStyle(color: Colors.green,
+                                fontWeight: FontWeight.bold),),
+                        ),
 
-                    ],)
-                  ],
-                ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: RatingBarIndicator(
-                  rating: allReviews[index]['rating'].toDouble(),
-                  itemBuilder: (context, index) => Icon(
-                    Icons.star,
-                    color: Colors.amber,
+                      ],)
+                    ],
                   ),
-                  itemCount: 5,
-                  itemSize: 20.0,
-                  direction: Axis.horizontal,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text(allReviews[index]['review']),
-              )
-            ],
-          ),)
+
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: RatingBarIndicator(
+                    rating: allReviews[index]['rating'].toDouble(),
+                    itemBuilder: (context, index) =>
+                        Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                    itemCount: 5,
+                    itemSize: 20.0,
+                    direction: Axis.horizontal,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(allReviews[index]['review']),
+                )
+              ],
+            ),)
         ),
       ),
     );
   }
-  CircleAvatar pic(){
-    return CircleAvatar(
-      radius: 40,
-      //ADD A PHOTO HERE!!
-      child: Icon(Icons.account_circle,color: colors[2],size: 80,),
-      backgroundColor: Colors.transparent,
-    );
-  }
+
 
   getReviews() async {
-    final snapshot = await FirebaseFirestore.instance.collection('Users').doc(seller['uid']).collection('reviews').get();
+    final snapshot = await FirebaseFirestore.instance.collection('Users').doc(
+        seller['uid']).collection('reviews').get();
 
-      allReviews=snapshot.docs.map((doc) => doc.data()).toList();
-      CollectionReference users = FirebaseFirestore.instance.collection('Users');
-      for (var i=0;i<=allReviews.length;i++){
-        users.doc(allReviews[i]['reviewerId']).get().then((value) =>
-            userWhoReview.add(value.data()));
-      }
+    allReviews = snapshot.docs.map((doc) => doc.data()).toList();
+    //userWhoReview=
+    // CollectionReference users = FirebaseFirestore.instance.collection('Users');
+    // userWhoReview.clear();
+    // for (var i in allReviews){
+    //   users.doc(i['reviewerId']).get().then((value) => userWhoReview.add(value));
+    // }
+    // print(userWhoReview);
+    check = true;
+    setState(() {
 
-
-      check=true;
-      setState(()
-      {
-
-      });
+    });
   }
 
-  addRating(rate,review) async {
-    await SharedPreferences.getInstance().then((value){
-      var id  = value.getString('userID');
+  addRating(rate, review) async {
+    await SharedPreferences.getInstance().then((value) {
+      var id = value.getString('userID');
       FirebaseFirestore.instance.collection('Users').doc(seller['uid'])
           .collection('reviews').add({
-        'reviewerId':id,
-        'rating':rate,
-        'review':review,
+        'reviewerId': id,
+        'rating': rate,
+        'review': review,
       });
       getReviews();
-      setState(() {
-      });
+      setState(() {});
     }
-    );}
-
+    );
+  }
 }
+  class ImageDialog extends StatefulWidget {
+  @override
+  String image;
+  ImageDialog(this.image);
+  _ImageDialogState createState() => _ImageDialogState(this.image);
+  }
+
+  class _ImageDialogState extends State<ImageDialog> {
+  String image;
+  _ImageDialogState(this.image);
+  @override
+  Widget build(BuildContext context,) {
+  return Dialog(
+  child: Container(
+  width:  MediaQuery.of(context).size.width*0.5,
+  height:  MediaQuery.of(context).size.height*0.5,
+  decoration: BoxDecoration(
+  image: DecorationImage(
+  image: NetworkImage(image),
+  fit: BoxFit.cover
+  )
+  ),
+  ),
+  );
+  }
+  }
+
+
 List creatingColors() {
   var colors = [];
   colors.add(Color(0xff669966));
