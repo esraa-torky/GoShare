@@ -47,6 +47,7 @@ dependencies:
   #path_provider: ^2.0.2
   cupertino_setting_control: ^1.0.0+7
   clean_settings: ^0.1.5
+  contactus: ^1.1.8
 
 dev_dependencies:
   flutter_test:

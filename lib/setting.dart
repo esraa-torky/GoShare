@@ -14,6 +14,8 @@ class SettingsUI extends StatelessWidget {
       home: EditProfilePage(),
     );
   }
+
+
 }
 
 class EditProfilePage extends StatefulWidget {
@@ -31,6 +33,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   //getCurrentUser();
   bool showPassword = false;
   String Password = "";
+  String newEmail = "";
+  String newName = "";
+  final myControllerEmail = TextEditingController();
+  final myControllerPassword = TextEditingController();
+  final myControllerName = TextEditingController();
+  //final myController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,11 +82,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 SizedBox(
                   height: 35,
                 ),
-                buildTextField("Change Name", "", false),
-                buildTextField("Change Surname", "", false),
-                buildTextField("Change Email", "", false),
-                buildTextField("Change Password", "", true),
-                Text("Settings",
+                buildTextField("Change Name", "", false, myControllerName),
+                buildTextField("Change Email", "", false, myControllerEmail),
+                buildTextField("Change Password", "", true, myControllerPassword),
+                Text("",
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
                 SettingRow(
                     rowData: SettingsDropDownConfig(
@@ -128,7 +135,39 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       ),
                       RaisedButton(
                         onPressed: () {
-                          //Navigator.of(context).push;//ChangePassword()));
+
+                          if(myControllerName.text != ""){
+                            var user = FirebaseAuth.instance.currentUser;
+                            user.updateProfile(displayName: myControllerName.text).then((value)=>{
+                              print("Profile has been changed successfully")}
+                              //DO Other compilation here if you want to like setting the state of the app
+                            ).catchError((e){
+                              print("There was an error updating profile");
+                            });
+
+                          }
+
+
+                          if(myControllerEmail.text != ""){
+                            FirebaseAuth.instance.currentUser.updateEmail(myControllerEmail.text).then((value) => {
+                              print("update succesfull")}
+                            ).catchError((error) => {
+                              print("Email error" + myControllerEmail.text)
+                            });
+                          }
+
+                          if(myControllerPassword.text != ""){
+                            FirebaseAuth.instance.currentUser.updatePassword("deneme@gmail.com").then((value) => {
+                              print("update succesfull")}
+                            ).catchError((error) => {
+                              print("error occured")
+                            });
+                          }
+
+
+
+
+
                         },
                         color: Colors.green,
                         //padding: EdgeInsets.symmetric(horizontal: 50),
@@ -182,10 +221,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Widget buildTextField(
-      String labelText, String placeholder, bool isPasswordTextField) {
+      String labelText, String placeholder, bool isPasswordTextField, TextEditingController controller) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
+        controller: controller,
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
             suffixIcon: isPasswordTextField
@@ -209,18 +249,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Colors.black,
+
             )),
       ),
     );
   }
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
-  // getCurrentUser() async {
-  //   final FirebaseUser user = _auth.currentUser;
-  //   final uid = user.uid;
-  //   print(uid);
-  //   //print(uemail);
-  // }
- changeUserName(){
 
- }
 }

@@ -85,6 +85,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
+  contactus:
+    dependency: "direct main"
+    description:
+      name: contactus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.8"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -454,7 +461,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.1"
   sqflite:
     dependency: "direct main"
     description:
@@ -510,7 +517,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.19"
+    version: "0.3.0"
   toast:
     dependency: "direct main"
     description:
@@ -525,6 +532,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  typicons_flutter:
+    dependency: transitive
+    description:
+      name: typicons_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.2"
   url_launcher:
     dependency: "direct main"
     description:

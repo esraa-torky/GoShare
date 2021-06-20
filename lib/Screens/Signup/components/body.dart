@@ -29,7 +29,13 @@ class _BodyState extends State<Body> {
 
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   @override
+  bool isName = false;
+  bool isSurname = false;
+  bool isPassword = false;
+  bool isEmail = false;
+
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Background(
       child: SingleChildScrollView(
         child: Column(
@@ -55,45 +61,46 @@ class _BodyState extends State<Body> {
               icon: Icons.email_rounded,
               hintText: "Email*",
               onChanged: (value) {
-                this.email = value;
+                if (!value.isEmpty) {
+                  isEmail = true;
+                }
               },
             ),
             RoundedInputField(
               hintText: "City",
-              onChanged: (value) {
-                city=value;
-              },
+              onChanged: (value) {},
             ),
             RoundedInputField(
               hintText: "Neighbourhood",
-              onChanged: (value) {
-                neighbourhood=value;
-              },
+              onChanged: (value) {},
             ),
             RoundedPasswordField(
               onChanged: (value) {
-                this.password = value;
+                if (!value.isEmpty) {
+                  isPassword = true;
+                }
               },
             ),
             RoundedButton(
               color: Colors.green.shade400,
               text: "SIGNUP",
               press: () {
-                FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password)
-                    .then((value) async {
-                  // SharedPreferences prefs = await SharedPreferences.getInstance();
-                  // await prefs.setString('userID', value.user.uid);
-                  setState(() {
-
-                    addUsers(email, password,name,surname,neighbourhood,city,value.user.uid);
+                if ((isName && isSurname && isEmail && isPassword) == false) {
+                  ErrorMessage(context).then((onValue) {});
+                } else {
+                  FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password)
+                      .then((value) async {
+                    setState(() {
+                      addUsers(email, password,name,surname,neighbourhood,city,value.user.uid);
+                    });
+                  }).catchError((e) {
+                    Toast.show(e.toString(), context,
+                        duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
                   });
-                }).catchError((e) {
-                  Toast.show(e.toString(), context,
-                      duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-                });
+                }
               },
             ),
-            SizedBox(height: 20),
+            SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
               login: false,
               press: () {
@@ -131,6 +138,30 @@ class _BodyState extends State<Body> {
     );
   }
 
+  ErrorMessage(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text(
+                      'Please do not forget to enter user name, surname, email or password'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Approve'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });}
   void addUsers(String email, String password, String name,String surname,String neighbourhood,String city,String uid) {
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
     users..doc(uid).set(
@@ -152,5 +183,4 @@ class _BodyState extends State<Body> {
       Toast.show(e.toString(), context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
     });
   }
-  }
-
+}
