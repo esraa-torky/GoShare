@@ -7,17 +7,12 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/modals.dart';
-import 'package:go_share/Product.dart';
-import 'package:go_share/User.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Home_page.dart';
-import 'control.dart';
-import 'Product.dart';
 var colors = creatingColors();
-Control c=new Control();
-List<User>users=c.users;
-List<Product> userProduct=users[0].userProducts;
+
+
 
 
 class UserProfile extends StatefulWidget {
@@ -28,16 +23,15 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Map userDataMap;
   File imageFile;
-  String path,id;
-  String categoryName;
+  String path,id,categoryName,pname,price,description;
   File productImage;
   String dropdownValue = "choose the item category";
-  TextEditingController customeController=TextEditingController();
-  TextEditingController customeController1=TextEditingController();
-  TextEditingController customeController2=TextEditingController();
+  List products=[];
+
   void initState()
   {
     getData();
+    getProducts();
     super.initState();
   }
 
@@ -79,82 +73,14 @@ class _UserProfileState extends State<UserProfile> {
                       backgroundColor: colors[0],
                       child: IconButton(icon: Icon(Icons.add,color: Colors.white,size: 20,)
                           , onPressed: () {
-                            showModalBottomSheet(
-                              isScrollControlled: true,
-                              context: context,
-                              builder: (context) {
-                                return Column(children: [
-                                  SimpleDialogItem(
-                                    text: 'Name',
-                                    size: 40,
-                                    child: TextField(
-                                      controller: customeController1,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                      ),
-                                    ),
-                                  ),
-                                  SimpleDialogItem(
-                                    text: 'Price',
-                                    size: 40,
-                                    child: TextField(
-                                      controller: customeController,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                      ),
-                                    ),
-                                  ),
-                                  SimpleDialogItem(
-                                      text:'Category',
-                                    child:
-                                    DropdownSearch<String>(
-                                        mode: Mode.MENU,
-                                        showSelectedItem: true,
-                                        items: ['ELECTRONICS','CLOTHING','HOME AND GARDENING','FILM','SPORTS'],
-                                        hint: "choose the item category",
-                                        popupItemDisabled: (String s) => s.startsWith('I'),
-                                        onChanged:(String data) {
-                                          categoryName=data;
-                                        }),)
-                                  ,
-                                  SimpleDialogItem(
-                                    text: 'Description',
-                                    size:100,
-                                    child: TextField(
-                                      controller: customeController2,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        //errorStyle: ,
-                                      ),
-                                    ),
-                                  ),
-                                  // Padding(
-                                  //   padding: const EdgeInsets.all(10),
-                                  //   child: TextButton(child: Row(
-                                  //     children: [
-                                  //       Text('Add image of the item',style: TextStyle(color: Colors.green),),
-                                  //       SizedBox(width: 20,),
-                                  //       Icon(Icons.add_a_photo,color: Colors.green,)
-                                  //     ],
-                                  //   ),
-                                  //   onPressed: (){
-                                  //     productImage=selectImage2();
-                                  //
-                                  //   },),
-                                  //),
-                                  MaterialButton(elevation: 5.0,
-                                    child: Text('Submit',style: TextStyle(color: colors[0]),),
-                                    onPressed: (){
+                            showDialog(context: context, builder:(context) {
+                              return addProductDialog(context);
+                            });
 
-                                      addNewProduct(categoryName, customeController1.toString(), customeController2.toString(), customeController.toString()); //imageFile.path.split('/').last);
-                                    },
-                                  ),
-                                ],);
-                              },
-                            );
-                          }),
+                          })
+                          ),
                     ),
-                  ),
+
                 ],
               ),
             ),
@@ -217,7 +143,7 @@ class _UserProfileState extends State<UserProfile> {
                     children: <Widget>[
                       Text("Items",
                         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: colors[0],fontFamily: 'QuickSand'),),
-                      Text(userProduct.length.toString(),
+                      Text(userDataMap['items number'].toString(),
                         style: TextStyle(color: Colors.grey,fontSize: 18),)
                     ],
                   ),
@@ -228,7 +154,7 @@ class _UserProfileState extends State<UserProfile> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text("Points",style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: colors[0],fontFamily: 'QuickSand'),),
-                      Text(users[0].points.toString(),style: TextStyle(color: Colors.grey,fontSize: 18),)
+                      Text(userDataMap['points'].toString(),style: TextStyle(color: Colors.grey,fontSize: 18),)
                     ],
                   ),
                 ]),
@@ -315,12 +241,12 @@ class _UserProfileState extends State<UserProfile> {
     ),);
   }
   Container listOfItemsGrid(){
-    if (userProduct.isEmpty){
+    if (products.isEmpty){
       return Container();
     }
     return Container(
       color: Colors.grey[100],
-      child: GridView.builder(itemCount: userProduct.length,
+      child: GridView.builder(itemCount: products.length,
           //physics: NeverScrollableScrollPhysics(),
           gridDelegate:
           SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,
@@ -343,15 +269,16 @@ class _UserProfileState extends State<UserProfile> {
               ],
               onPressed: (){},
               blurBackgroundColor: colors[2],
-              child:itemGrid(userProduct[index].image),),);
+              child:itemGrid(products[index]['image']),),);
           }),
     );
   }
   Container listOfItemsList(){
     return Container(
       color: Colors.grey[100],
-      child: ListView.separated(itemCount: userProduct.length,
-         // physics: NeverScrollableScrollPhysics(),
+      child: ListView.separated(
+          itemCount: products.length,
+
           itemBuilder: (BuildContext context,int index ){
             return GridTile(
                 child: itemList(index));
@@ -380,13 +307,13 @@ class _UserProfileState extends State<UserProfile> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                        // decoration: BoxDecoration(color: Colors.green[400],
-                        //   borderRadius: BorderRadius.all(Radius.circular(10)),),
+
                       width:MediaQuery.of(context).size.width*0.12 ,
                       height:MediaQuery.of(context).size.height*0.05 ,
                       child:Center(
                         child: RichText(text: TextSpan(children: [
-                          TextSpan(text:userProduct[index].price,
+                          TextSpan(text:
+                          products[index]['points'].toString(),
                             style: TextStyle(color: Colors.green, fontSize: 15,fontWeight: FontWeight.bold),
                           ),
                           WidgetSpan(child:Icon( Icons.monetization_on_outlined,color: Colors.green,
@@ -401,14 +328,14 @@ class _UserProfileState extends State<UserProfile> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Align(alignment: Alignment.bottomLeft,
-              child: Text((userProduct[index].name+"|"+userProduct[index].type),
+              child: Text((products[index]['name']+"|"+products[index]['category']),
                 style: TextStyle(fontWeight: FontWeight.bold,color:colors[0],fontSize: 18 ),),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Align(alignment: Alignment.bottomLeft,
-              child: Text(userProduct[index].description,
+              child: Text(products[index]['description'],
                 style: TextStyle(color:Colors.grey,fontSize: 15 ),),
             ),
           )
@@ -439,7 +366,7 @@ class _UserProfileState extends State<UserProfile> {
     ;
   }
   void delete(int index){
-    users[0].userProducts.removeAt(index);
+    //users[0].userProducts.removeAt(index);
     setState(() {
     });
   }
@@ -451,20 +378,25 @@ class _UserProfileState extends State<UserProfile> {
           text: 'Name',
           size: 40,
           child: TextField(
-            controller: customeController1,
+            onChanged: (value) {
+              pname=value;
+            },
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText:userProduct[index].name.toString(),),
+              labelText:products[index]['name'],),
           ),
         ),
         SimpleDialogItem(
           text: 'Price',
           size: 40,
           child: TextField(
-            controller: customeController,
+            keyboardType: TextInputType.number,
+            onChanged: (value) {
+              price=value;
+            },
             decoration: InputDecoration(
               border: OutlineInputBorder(),
-              labelText:userProduct[index].price.toString(),),
+              labelText:products[index]['points'],),
           ),
         ),
         SimpleDialogItem(text:'Category',
@@ -472,37 +404,152 @@ class _UserProfileState extends State<UserProfile> {
               mode: Mode.MENU,
               popupBarrierColor: Colors.green,
               showSelectedItem: true,
-              items: ['ELECTRONICS','CLOTHING','HOME AND GARDENING','FILM','SPORTS'],
+              items: ['ELECTRONICS','CLOTHES','HOME AND GARDENING','FILM','SPORTS'],
               hint: "choose the item category",
               popupItemDisabled: (String s) => s.startsWith('I'),
               onChanged:(String data) {categoryName= data;},
-              selectedItem: userProduct[index].type),
+              selectedItem: products[index]['category']),
         ),
         SimpleDialogItem(
           text: 'Description',
           size:100,
           child: TextField(
-            controller: customeController2,
+            onChanged: (value) {
+              description=value;
+            },
             decoration: InputDecoration(
               border: OutlineInputBorder(),
               //errorStyle: ,
-              labelText:userProduct[index].description.toString(),),
+              labelText:products[index]['description'],),
           ),
         ),
         MaterialButton(elevation: 5.0,
             child: Text('Submit',style: TextStyle(color: colors[0]),),
             onPressed: (){
-              //Navigator.of(context).pop(customeController.text.toString());
-              userProduct[index].price=customeController.text.toString();
-              userProduct[index].name=customeController1.text.toString();
-              userProduct[index].description=customeController2.text.toString();
-              addNewProduct(categoryName, customeController1.text, customeController2.text, customeController.text);
+
+              //addNewProduct(categoryName, customeController1.text.toString(), customeController2.text.toString(), customeController.text.toString());
               setState(() {});
             }),
       ],
     );
   }
+  addProductDialog(BuildContext context){
+    return SimpleDialog(
+        title: Text('Edit product info',style: TextStyle(color: colors[2]),),
+        children: [
+          SimpleDialogItem(
+            text: 'Name',
+            size: 40,
+            child: TextField(
+              onChanged: (value) {
+                pname=value;
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          SimpleDialogItem(
+            text: 'Price',
+            size: 40,
+            child: TextField(
+              onChanged: (value) {
+                price=value;
+              },
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
+          SimpleDialogItem(
+            text:'Category',
+            child:
+            DropdownSearch<String>(
+                mode: Mode.MENU,
+                showSelectedItem: true,
+                items: ['ELECTRONICS','CLOTHES','HOME AND GARDENING','FILM','SPORTS'],
+                hint: "choose the item category",
+                popupItemDisabled: (String s) => s.startsWith('I'),
+                onChanged:(String data) {
+                  categoryName=data;
+                }),)
+          ,
+          SimpleDialogItem(
+            text: 'Description',
+            size:100,
+            child: TextField(
+              onChanged: (value) {
+                description=value;
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                //errorStyle: ,
+              ),
+            ),
+          ),
+          
+          MaterialButton(elevation: 5.0,
+            child: Text('Next',style: TextStyle(color: colors[0]),),
+            onPressed: (){
+              Navigator.of(context).pop();
 
+              var productid =addNewProduct(categoryName, pname, description, price);
+              showDialog(context: context, builder:(context) {
+                return addImage(context,productid);
+              });
+            },
+          ),]);
+  }
+  addImage(context,productid){
+    return SimpleDialog(
+        title: Text('Edit product info',style: TextStyle(color: colors[2]),),
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: TextButton(child: Row(
+              children: [
+                Text('Add image of the item',style: TextStyle(color: Colors.green),),
+                SizedBox(width: 20,),
+                Icon(Icons.add_a_photo,color: Colors.green,)
+              ],
+            ),
+            onPressed: () async {
+              final selectedImage = await ImagePicker().getImage(source: ImageSource.gallery);
+              productImage = File(selectedImage.path);
+              setState(() {
+
+              });
+
+            },),
+          ),
+          MaterialButton(elevation: 5.0,
+              child: Text('Add',style: TextStyle(color: colors[0]),),
+              onPressed: (){
+            firebase_storage.FirebaseStorage.instance
+                .ref()
+                .child('${productImage.uri.pathSegments[productImage.uri.pathSegments.length - 1]}')
+                .putFile(productImage).onComplete.then((value) async
+            {
+            await value.ref.getDownloadURL().then((value)
+            {
+            CollectionReference users = FirebaseFirestore.instance.collection('Users');
+        
+            users.doc(id).collection('products').doc(productid).update({
+            'image': value.toString(),
+            }).then((value)
+            {
+            getData();
+            }).catchError((error)
+            {
+            print(error.toString());
+            });
+            });
+            });
+            setState(() {});
+              }),
+        ],);
+  }
 
 
   getData() async
@@ -523,12 +570,17 @@ class _UserProfileState extends State<UserProfile> {
       });
     });
   }
-
-  selectImage2() async
-  {
-    final selectedImage = await ImagePicker().getImage(source: ImageSource.gallery);
+  getProducts() async {
+    CollectionReference users = FirebaseFirestore.instance.collection('Users');
+    await SharedPreferences.getInstance().then((value)
+    {
+      id = value.getString('userID');
+      users.doc(id).collection('products').get().then((value) =>
+        products=value.docs.map((doc) => doc.data()).toList()
+      );
+    });
     setState(() {
-      return File(selectedImage.path);
+
     });
   }
   selectImage() async
@@ -560,17 +612,34 @@ class _UserProfileState extends State<UserProfile> {
     });
 
   }
-  addNewProduct(String category,String name,String description,String price){
+  addNewProduct( category, name, description, price){
+    var productId;
     FirebaseFirestore.instance.collection(category).add({
       'name': name,
       'description':description,
-      'price':int.parse(price),
+      'points':int.parse(price),
       'image':'',
       'sellerId':id,
+      'pId':'',
       }).then((value) {
-      'pId': value.id;
+      FirebaseFirestore.instance.collection(category).doc(value.id).update({'pId': value.id
+
+      });
+      FirebaseFirestore.instance.collection('Users').doc(id).collection('products').doc(value.id).set({
+        'category':category,
+        'pId':value.id,
+        'name': name,
+        'description':description,
+        'points':int.parse(price),
+        'image':'',
+      });
+        productId=value;
       });
 
+    setState(() {
+
+    });
+    return productId;
   }
 
 

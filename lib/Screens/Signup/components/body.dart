@@ -134,7 +134,7 @@ class _BodyState extends State<Body> {
   void addUsers(String email, String password, String name,String surname,String neighbourhood,String city,String uid) {
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
     users..doc(uid).set(
-        {
+        { 'items number':0,
           'user_name':name+" "+surname,
           'email':email,
           'city':city,

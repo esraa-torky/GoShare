@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:go_share/UserProfile.dart';
 import 'package:go_share/category_item.dart';
 import 'package:go_share/chat.dart';
 import 'package:go_share/sellerProfile.dart';
@@ -19,7 +20,7 @@ class Item extends StatefulWidget {
 
 class _ItemState extends State<Item> {
   Map itemDataMap,seller;
-
+  String id;
   _ItemState({this.itemDataMap,});
   void initState()
   {
@@ -125,6 +126,7 @@ class _ItemState extends State<Item> {
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     child: TextButton(
                       onPressed: (){
+                        if (seller['uid']!=id){
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -132,7 +134,17 @@ class _ItemState extends State<Item> {
                               return SellerProfile(seller: seller,);
                             },
                           ),
-                        );
+                        );}
+                        else{
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return UserProfile();
+                              },
+                            ),
+                          );
+                        }
                       },
                       child: CircleAvatar(backgroundImage:
                       seller['image'] !=null ? FileImage(File(seller['image']))
@@ -173,7 +185,9 @@ class _ItemState extends State<Item> {
                     borderRadius: BorderRadius.circular(15.0),
                   ),
                   clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: RaisedButton.icon(
+                  child:
+                  seller['uid']!=id?
+                  RaisedButton.icon(
                     onPressed: () async {
                       Navigator.push(
                         context,
@@ -188,7 +202,22 @@ class _ItemState extends State<Item> {
                       icon:Icon(Icons.chat,color: Colors.white,),
                       label: Text("Contact Me",style: TextStyle(
                           color: Colors.white, fontSize: 16.0))
-                  ),
+                  ): RaisedButton.icon(
+                    onPressed: () async {
+              Navigator.push(
+              context,
+              MaterialPageRoute(
+              builder: (context) {
+              return UserProfile();
+              },
+              ),
+              );
+              },
+                  disabledColor: Colors.green,
+                  icon:Icon(Icons.chat,color: Colors.white,),
+                  label: Text("Go To Your Profile",style: TextStyle(
+                      color: Colors.white, fontSize: 16.0))
+              ),
                 ),
               ),
             ],
@@ -202,7 +231,11 @@ class _ItemState extends State<Item> {
   {
     CollectionReference user = FirebaseFirestore.instance.collection('Users');
 
+    await SharedPreferences.getInstance().then((value)
+    {
+      id = value.getString('userID');
 
+        });
       user.doc(itemDataMap['sellerId']).get().then((value)
       {
         seller= value.data();

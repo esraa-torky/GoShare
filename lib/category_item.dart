@@ -156,7 +156,7 @@ class _CategoryItemState extends State<CategoryItem> {
   );
   getData() async
   {
-    CollectionReference type = FirebaseFirestore.instance.collection('CLOTHES');
+    CollectionReference type = FirebaseFirestore.instance.collection(name);
     QuerySnapshot querySnapshot = await type.get();
     // Get data from docs and convert map to List
     allData = querySnapshot.docs.map((doc) => doc.data()).toList();
