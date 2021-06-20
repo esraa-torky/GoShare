@@ -48,13 +48,19 @@ class _BodyState extends State<Body> {
             RoundedInputField(
               hintText: "Name*",
               onChanged: (value) {
-                name=value;
+                if(!value.isEmpty){
+                isName=true;
+                  name=value;}
               },
             ),
             RoundedInputField(
               hintText: "Surname*",
               onChanged: (value) {
-                surname=value;
+                if(!value.isEmpty){
+                  isSurname=true;
+                  surname=value;
+                }
+
               },
             ),
             RoundedInputField(
@@ -63,21 +69,27 @@ class _BodyState extends State<Body> {
               onChanged: (value) {
                 if (!value.isEmpty) {
                   isEmail = true;
+                  email=value;
                 }
               },
             ),
             RoundedInputField(
               hintText: "City",
-              onChanged: (value) {},
+              onChanged: (value) {
+                city=value;
+              },
             ),
             RoundedInputField(
               hintText: "Neighbourhood",
-              onChanged: (value) {},
+              onChanged: (value) {
+                neighbourhood=value;
+              },
             ),
             RoundedPasswordField(
               onChanged: (value) {
                 if (!value.isEmpty) {
                   isPassword = true;
+                  password=value;
                 }
               },
             ),

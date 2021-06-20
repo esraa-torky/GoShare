@@ -63,6 +63,11 @@ class _BodyState extends State<Body> {
                   ).then((value) async {
                      SharedPreferences prefs = await SharedPreferences.getInstance();
                       await prefs.setString('userID', value.user.uid);
+                     Navigator.push(
+                         context,
+                         MaterialPageRoute(
+                         builder: (context) {
+                       return HomePage();}));
                    });
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'user-not-found' || e.code == 'wrong-password') {
@@ -72,20 +77,9 @@ class _BodyState extends State<Body> {
                     ErrorMessage(context).then((onValue) {});
                   }
 
-                  else{
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return HomePage();
-                        },
-                      ),
-                    );
-
                   }
                 }
 
-              },
             ),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(

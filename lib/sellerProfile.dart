@@ -7,11 +7,7 @@ import 'package:focused_menu/focused_menu.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/modals.dart';
-import 'package:go_share/Product.dart';
-import 'package:go_share/User.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'control.dart';
-import 'Product.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 var colors = creatingColors();
 class SellerProfile extends StatefulWidget {
