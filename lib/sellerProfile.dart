@@ -149,8 +149,7 @@ class _SellerProfileState extends State<SellerProfile> {
       radius: 40,
       //ADD A PHOTO HERE!!
      // child: Icon(Icons.account_circle,color: colors[2],size: 80,),
-      backgroundImage: seller['image'] !=null ? FileImage(File(seller['image']))
-          :seller['image'].length != 0?NetworkImage(seller['image'])
+      backgroundImage: seller['image'].length != 0?NetworkImage(seller['image'])
           :NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),
     );
   }
@@ -227,10 +226,8 @@ class _SellerProfileState extends State<SellerProfile> {
                   radius: 20,
                   //ADD A PHOTO HERE!!
 
-                  backgroundImage:
-                  // userWhoReview[index]['image'] !=null ? FileImage(File(userWhoReview[index]['image']))
-                  //     :userWhoReview[index]['image'].length != 0?NetworkImage(userWhoReview[index]['image'])
-                  //     :
+                  backgroundImage: userWhoReview[index]['image'].length != 0?NetworkImage(userWhoReview[index]['image'])
+                      :
                   NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),),
                     Column(children: [
                       Padding(

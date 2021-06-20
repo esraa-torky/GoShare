@@ -59,18 +59,8 @@ class _ItemState extends State<Item> {
                 clipBehavior: Clip.antiAliasWithSaveLayer,
                 width: double.infinity,
                height: 300,
-               child: Carousel(
-                   images: [
-                     NetworkImage('https://i5.walmartimages.com/asr/af62269a-da71-4283-be61-b9638d449449_1.b2811d9a8abd43a686bb3e347a75b31b.jpeg?odnWidth=612&odnHeight=612&odnBg=ffffff'),
-                     NetworkImage('https://www.wigglestatic.com/product-media/100375136/Brand-X-Road-Bike-Road-Bikes-Black-2017-BRNDXROADXL-0.jpg?w=1200&h=1200&a=7'),
-                   ],
-                 dotSize: 4.0,
-                 dotSpacing: 15.0,
-                 dotColor: Colors.green,
-                 indicatorBgPadding: 5.0,
-                 dotBgColor: Colors.transparent,
-                 borderRadius: true,
-               ),
+               child: Image.network(itemDataMap['image'], fit: BoxFit.fitHeight),
+
               ),
               SizedBox(height: 15),
               Text(itemDataMap['name']
@@ -147,10 +137,10 @@ class _ItemState extends State<Item> {
                         }
                       },
                       child: CircleAvatar(backgroundImage:
-                      seller['image'] !=null ? FileImage(File(seller['image']))
-                          :seller['image'].length != 0?NetworkImage(seller['image'])
+
+                          seller['image'].length != 0?NetworkImage(seller['image'])
                           :NetworkImage('https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'
-                      )
+                     , )
 
                       ,backgroundColor: Colors.transparent,
                       ),

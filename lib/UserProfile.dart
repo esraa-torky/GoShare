@@ -176,9 +176,7 @@ class _UserProfileState extends State<UserProfile> {
             style: TextStyle(color: Colors.black54, fontSize: 18,fontWeight: FontWeight.bold,fontFamily: 'QuickSand'),
           ),
           SizedBox(height: 10,),
-        // Text(userDataMap['email'],
-        //   style: TextStyle(color: colors[2], fontSize: 15,),
-        // ),
+
         RichText(text: TextSpan(children: [
           WidgetSpan(child: Icon(Icons.location_on_sharp,color: colors[0],size: 18,)),
           TextSpan(text:userDataMap['city']+','+userDataMap['neighbourhood'],
@@ -269,7 +267,7 @@ class _UserProfileState extends State<UserProfile> {
               ],
               onPressed: (){},
               blurBackgroundColor: colors[2],
-              child:itemGrid(products[index]['image']),),);
+              child:itemGrid(index),),);
           }),
     );
   }
@@ -288,9 +286,12 @@ class _UserProfileState extends State<UserProfile> {
           }),
     );
   }
-  Card itemGrid(String image){
-    return Card(child: Container(child:Image.network('https://i.pinimg.com/564x/9c/ec/cd/9ceccd67b51eec22ebe7079e0063eed9.jpg')));
+  itemGrid(index){
+
+    return Card(child: Container(child:Image.network(products[index]['image'])
+        ));
   }
+
   Card itemList(int index){
     return Card(
       child: Container(width: 80,height:MediaQuery.of(context).size.height*0.35,
@@ -298,7 +299,7 @@ class _UserProfileState extends State<UserProfile> {
           Expanded(
             child: Stack(
               children:<Widget> [
-                SizedBox.expand(child: Image.network('https://i.pinimg.com/564x/9c/ec/cd/9ceccd67b51eec22ebe7079e0063eed9.jpg')),
+                SizedBox.expand(child: Image.network(products[index]['image'])),
                 Container(
                   alignment: Alignment.topRight,
                   child: optionsMenu(index),),
@@ -433,6 +434,7 @@ class _UserProfileState extends State<UserProfile> {
       ],
     );
   }
+
   addProductDialog(BuildContext context){
     return SimpleDialog(
         title: Text('Edit product info',style: TextStyle(color: colors[2]),),
@@ -494,14 +496,14 @@ class _UserProfileState extends State<UserProfile> {
             onPressed: (){
               Navigator.of(context).pop();
 
-              var productid =addNewProduct(categoryName, pname, description, price);
+
               showDialog(context: context, builder:(context) {
-                return addImage(context,productid);
+                return addImage(context,categoryName, pname, description, price);
               });
             },
           ),]);
   }
-  addImage(context,productid){
+  addImage(context,categoryName, pname, description, price){
     return SimpleDialog(
         title: Text('Edit product info',style: TextStyle(color: colors[2]),),
         children: [
@@ -518,36 +520,23 @@ class _UserProfileState extends State<UserProfile> {
               final selectedImage = await ImagePicker().getImage(source: ImageSource.gallery);
               productImage = File(selectedImage.path);
               setState(() {
-
               });
-
             },),
           ),
           MaterialButton(elevation: 5.0,
               child: Text('Add',style: TextStyle(color: colors[0]),),
               onPressed: (){
-            firebase_storage.FirebaseStorage.instance
+              firebase_storage.FirebaseStorage.instance
                 .ref()
                 .child('${productImage.uri.pathSegments[productImage.uri.pathSegments.length - 1]}')
                 .putFile(productImage).onComplete.then((value) async
             {
             await value.ref.getDownloadURL().then((value)
             {
-            CollectionReference users = FirebaseFirestore.instance.collection('Users');
-        
-            users.doc(id).collection('products').doc(productid).update({
-            'image': value.toString(),
-            }).then((value)
-            {
-            getData();
-            }).catchError((error)
-            {
-            print(error.toString());
-            });
-            });
-            });
-            setState(() {});
-              }),
+              addNewProduct(categoryName, pname, description, price,value);
+            });});
+              Navigator.of(context).pop();
+              },)
         ],);
   }
 
@@ -612,13 +601,12 @@ class _UserProfileState extends State<UserProfile> {
     });
 
   }
-  addNewProduct( category, name, description, price){
-    var productId;
+  addNewProduct( category, name, description, price,image){
     FirebaseFirestore.instance.collection(category).add({
       'name': name,
       'description':description,
       'points':int.parse(price),
-      'image':'',
+      'image':image.toString(),
       'sellerId':id,
       'pId':'',
       }).then((value) {
@@ -631,15 +619,15 @@ class _UserProfileState extends State<UserProfile> {
         'name': name,
         'description':description,
         'points':int.parse(price),
-        'image':'',
+        'image':image.toString(),
       });
-        productId=value;
+
       });
 
     setState(() {
 
     });
-    return productId;
+
   }
 
 

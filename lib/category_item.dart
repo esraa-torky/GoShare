@@ -121,8 +121,8 @@ class _CategoryItemState extends State<CategoryItem> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children:<Widget> [
-          Expanded(child: Image.file(File(allData[index].toString()))),
-          //Image.network('https://www.narscosmetics.eu/dw/image/v2/BCMQ_PRD/on/demandware.static/-/Sites-itemmaster_NARS/default/dw773e6329/hi-res/NARS_FA19_Lipstick_Soldier_LPS_Raw_Seduction_Satin_GLBL_B_square.jpg?sw=856&sh=750&sm=fit',fit: BoxFit.fitWidth,)),
+          Expanded(child: Image.network(allData[index]['image'], fit: BoxFit.fitWidth)),
+         // fit: BoxFit.fitWidth,)),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
