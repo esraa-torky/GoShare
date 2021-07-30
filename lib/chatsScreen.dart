@@ -105,10 +105,15 @@ class _ChatsScreenState extends State<ChatsScreen> {
     async {
       id = value.getString('userID');
       print(id);
-      final snapshot = await FirebaseFirestore.instance.collection('Users').get();
-      allChats=snapshot.docs.map((doc) => doc.data()).toList();
-          print(allChats);
+      final snapsho = await FirebaseFirestore.instance.collection('Users').doc(id).collection('chats').get();
+      var Chats=snapsho.docs.map((doc) => doc.data()).toList();
+      print(Chats);
+      for (int i=0;i<Chats.length;i++) {
+        final snapshot = await FirebaseFirestore.instance.collection('Users').doc(Chats[i]['oId']).get();
+        allChats.add(snapshot.data());
 
+      }
+      print(allChats);
     });
     setState(() {
     });

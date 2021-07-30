@@ -69,7 +69,7 @@ class _ItemState extends State<Item> {
               ),
               ),
               SizedBox(height: 10),
-              Text(itemDataMap['points'].toString()+' \$'
+              Text(itemDataMap['points'].toString()+' P'
                 ,
                 style: TextStyle(
                   color: Colors.black,fontWeight: FontWeight.bold,fontSize: 18

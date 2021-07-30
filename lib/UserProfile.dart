@@ -41,7 +41,6 @@ class _UserProfileState extends State<UserProfile> {
         length: 2,
         child: Scaffold(
           backgroundColor: Colors.grey[100],
-
           bottomNavigationBar:BottomAppBar (
             color: Colors.grey[100],
             child: Padding(
@@ -97,7 +96,10 @@ class _UserProfileState extends State<UserProfile> {
                       width:MediaQuery.of(context).size.width ,
                       height:150,
                       child: Image.asset('assets/images/copy.png',fit:BoxFit.fitWidth)),
-                   userInfo(),
+                   Padding(
+                     padding: const EdgeInsets.only(top:8.0),
+                     child: userInfo(),
+                   ),
                    ],
                 ),
                   Positioned(top:120,left:MediaQuery.of(context).size.width*0.40,
@@ -113,7 +115,9 @@ class _UserProfileState extends State<UserProfile> {
                   ),)
 
               ],)
-              : Center(child: CircularProgressIndicator())
+              : Center(child: CircularProgressIndicator(
+              valueColor: new AlwaysStoppedAnimation<Color>(Colors.green[200]),
+          ))
             )
     ,);
 
@@ -143,8 +147,8 @@ class _UserProfileState extends State<UserProfile> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text("Items",
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: colors[0],fontFamily: 'QuickSand'),),
-                      Text(userDataMap['items number'].toString(),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold ,color: Colors.green[500],fontFamily: 'QuickSand'),),
+                      Text(products.length.toString(),
                         style: TextStyle(color: Colors.grey,fontSize: 18),)
                     ],
                   ),
@@ -154,7 +158,7 @@ class _UserProfileState extends State<UserProfile> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text("Points",style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: colors[0],fontFamily: 'QuickSand'),),
+                      Text("Points",style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color:Colors.green[500] ,fontFamily: 'QuickSand'),),
                       Text(userDataMap['points'].toString(),style: TextStyle(color: Colors.grey,fontSize: 18),)
                     ],
                   ),
@@ -192,7 +196,7 @@ class _UserProfileState extends State<UserProfile> {
         //NOT DONE YET !!!!
         menuItems: [
           FocusedMenuItem(title: Text('View profile picture'),
-            trailingIcon: Icon(Icons.face,color: colors[2],),
+            trailingIcon: Icon(Icons.face,color: Colors.green[500],),
             onPressed: () async {
               await showDialog(
                   context: context,
@@ -201,14 +205,14 @@ class _UserProfileState extends State<UserProfile> {
 
                 }),
           FocusedMenuItem(title: Text('Change profile picture'),
-            trailingIcon: Icon(Icons.image,color: colors[2],),
+            trailingIcon: Icon(Icons.image,color: Colors.green[500],),
             onPressed: (){
             selectImage();
             }
           ),
         ],
         onPressed: (){},
-        blurBackgroundColor: colors[2],
+        blurBackgroundColor: Colors.green[50],
         child: profilePic(),
       ),
     );
@@ -234,8 +238,8 @@ class _UserProfileState extends State<UserProfile> {
   AppBar itemsViewBar(){
     return AppBar(
       backgroundColor: Colors.grey[100],
-      bottom: TabBar(tabs: [Tab(icon: Icon(Icons.grid_view,color: colors[0],),),
-        Tab(icon: Icon(Icons.view_day_rounded,color: colors[0],))]),
+      bottom: TabBar(tabs: [Tab(icon: Icon(Icons.grid_view,color: Colors.green[300],),),
+        Tab(icon: Icon(Icons.view_day_rounded,color: Colors.green[300],))]),
     )
     ;
   }
@@ -262,18 +266,18 @@ class _UserProfileState extends State<UserProfile> {
               menuWidth:  MediaQuery.of(context).size.width*0.5,
               openWithTap: true,
               menuItems: [
-                FocusedMenuItem(title: Text('Edit'),
-                    trailingIcon: Icon(Icons.edit_outlined,color: colors[2],),
+                FocusedMenuItem(title: Text('Edit',style: TextStyle(fontFamily: 'QuickSand',fontWeight: FontWeight.w800,color: Colors.grey[600])),
+                    trailingIcon: Icon(Icons.edit_outlined,color: Colors.green[300],),
                     onPressed:(){ showDialog(context: context, builder:(context) {
                       return edit(context, index);
                     });}
                 ),
-                FocusedMenuItem(title: Text('Delete'),
-                    trailingIcon: Icon(Icons.delete,color: colors[2],),
+                FocusedMenuItem(title: Text('Delete',style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'QuickSand',color: Colors.grey[600])),
+                    trailingIcon: Icon(Icons.delete,color: Colors.green[300],),
                     onPressed: (){delete(index);}),
               ],
               onPressed: (){},
-              blurBackgroundColor: colors[2],
+              blurBackgroundColor: Colors.green[50],
               child:itemGrid(index),),);
           }),
     );
@@ -315,16 +319,15 @@ class _UserProfileState extends State<UserProfile> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-
                       width:MediaQuery.of(context).size.width*0.12 ,
                       height:MediaQuery.of(context).size.height*0.05 ,
                       child:Center(
                         child: RichText(text: TextSpan(children: [
                           TextSpan(text:
-                          products[index]['points'].toString(),
-                            style: TextStyle(color: Colors.green, fontSize: 15,fontWeight: FontWeight.bold),
+                          products[index]['points'].toString()+' ',
+                            style: TextStyle(color: Colors.green[400], fontSize: 15,fontWeight: FontWeight.bold),
                           ),
-                          WidgetSpan(child:Icon( Icons.monetization_on_outlined,color: Colors.green,
+                          WidgetSpan(child:Icon( Icons.local_parking,color: Colors.green,
                               size: 15),),]
                         ),),
                       ),
@@ -336,15 +339,15 @@ class _UserProfileState extends State<UserProfile> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Align(alignment: Alignment.bottomLeft,
-              child: Text((products[index]['name']+"|"+products[index]['category']),
-                style: TextStyle(fontWeight: FontWeight.bold,color:colors[0],fontSize: 18 ),),
+              child: Text((products[index]['name']+' '+"|"+' '+products[index]['category']),
+                style: TextStyle(fontWeight: FontWeight.bold,color:Colors.green[400],fontSize: 18 ,fontFamily: 'QuickSand'),),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Align(alignment: Alignment.bottomLeft,
               child: Text(products[index]['description'],
-                style: TextStyle(color:Colors.grey,fontSize: 15 ),),
+                style: TextStyle(color:Colors.grey,fontSize: 15,fontFamily: 'QuickSand' ),),
             ),
           )
         ],),),
@@ -362,25 +365,27 @@ class _UserProfileState extends State<UserProfile> {
                 });
               },
               leading: Icon(Icons.edit_outlined),
-              title: Text('Edit'),
-            ),),
+              title: Text('Edit',style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'QuickSand',color: Colors.grey[600])),),
+            ),
           PopupMenuItem(
             child: ListTile(
-              onTap: (){delete(index);},
+              onTap: (){delete(index);
+                        Navigator.of(context).pop();},
               leading: Icon(Icons.delete),
-              title: Text('Delete'),
+              title: Text('Delete',style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'QuickSand',color: Colors.grey[600])),
             ),
           ),])
     ;
   }
   void delete(int index){
-    //users[0].userProducts.removeAt(index);
+    deleteProduct(index);
     setState(() {
+      initState();
     });
   }
   SimpleDialog edit(BuildContext context,int index){
     return SimpleDialog(
-      title: Text('Edit product info',style: TextStyle(color: colors[2]),),
+      title: Text('Edit product info',style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'QuickSand',color: Colors.green[400]),),
       children: [
         SimpleDialogItem(
           text: 'Name',
@@ -444,7 +449,7 @@ class _UserProfileState extends State<UserProfile> {
 
   addProductDialog(BuildContext context){
     return SimpleDialog(
-        title: Text('Edit product info',style: TextStyle(color: colors[2]),),
+        title: Text('Add New Product',style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'QuickSand',color: Colors.green[800])),
         children: [
           SimpleDialogItem(
             text: 'Name',
@@ -512,15 +517,18 @@ class _UserProfileState extends State<UserProfile> {
   }
   addImage(context,categoryName, pname, description, price){
     return SimpleDialog(
-        title: Text('Edit product info',style: TextStyle(color: colors[2]),),
+      title: Text('Add New Product',style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'QuickSand',color: Colors.green[800])),
         children: [
           Padding(
             padding: const EdgeInsets.all(10),
             child: TextButton(child: Row(
               children: [
-                Text('Add image of the item',style: TextStyle(color: Colors.green),),
+                Padding(
+                  padding: const EdgeInsets.only(left:8.0),
+                  child: Text('Add image of the item',style: TextStyle(color: Colors.green[300]),),
+                ),
                 SizedBox(width: 20,),
-                Icon(Icons.add_a_photo,color: Colors.green,)
+                Icon(Icons.add_a_photo,color: Colors.green[300],)
               ],
             ),
             onPressed: () async {
@@ -531,7 +539,7 @@ class _UserProfileState extends State<UserProfile> {
             },),
           ),
           MaterialButton(elevation: 5.0,
-              child: Text('Add',style: TextStyle(color: colors[0]),),
+              child: Text('Add',style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'QuickSand',color: Colors.green[800])),
               onPressed: (){
               firebase_storage.FirebaseStorage.instance
                 .ref()
@@ -541,13 +549,14 @@ class _UserProfileState extends State<UserProfile> {
             await value.ref.getDownloadURL().then((value)
             {
               addNewProduct(categoryName, pname, description, price,value);
+              setState(() {
+                initState();
+              });
             });});
               Navigator.of(context).pop();
               },)
         ],);
   }
-
-
   getData() async
   {
     CollectionReference users = FirebaseFirestore.instance.collection('Users');
@@ -636,7 +645,13 @@ class _UserProfileState extends State<UserProfile> {
     });
 
   }
+ deleteProduct(index){
+   FirebaseFirestore.instance.collection(products[index]['category']).doc(products[index]['pId']).delete();
+     FirebaseFirestore.instance.collection('Users').doc(id).collection('products').doc(products[index]['pId']).delete();
+   setState(() {
 
+   });
+ }
 
 
 
@@ -695,9 +710,9 @@ class SimpleDialogItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(bottom:8.0),
                 child: Text(text,
-                  style: TextStyle(color:colors[0],fontSize: 18,fontWeight: FontWeight.bold),),
+                  style: TextStyle(color:Colors.green[500],fontSize: 18,fontFamily: 'QuickSand'),),
               ),
 
             ],

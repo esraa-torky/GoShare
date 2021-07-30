@@ -25,8 +25,9 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   String email;
   String password;
-  String image,neighbourhood,name,surname,city;
-
+  String image,name,surname;
+  String neighbourhood='';
+  String city='';
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   @override
   bool isName = false;

@@ -67,7 +67,7 @@ class _ChatState extends State<Chat> {
         child: Column(
           children:<Widget> [
             Expanded(child: ListView.builder(
-                reverse: true,
+                reverse: false,
                 itemCount: massages.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context,index) =>messagebody(index)
@@ -120,19 +120,22 @@ class _ChatState extends State<Chat> {
     DateTime now = DateTime.now();
     await SharedPreferences.getInstance().then((value) {
       id1 = value.getString('userID');
-      FirebaseFirestore.instance.collection('Users').doc(id1)
-          .collection('chats').doc(id2).collection('massage').add({
+      FirebaseFirestore.instance.collection('Users').doc(id1).collection('chats').doc(id2).collection('massage').add({
             'sender':id1,
             'massage':massage,
-            'time':now.hour.toString() + ":" + now.minute.toString(),
-      });
+            'time':now.hour.toString() + ":" + now.minute.toString()+":"+now.second.toString(),});
+      FirebaseFirestore.instance.collection('Users').doc(id1).collection('chats').doc(id2).set({"oId":id2,});
       FirebaseFirestore.instance.collection('Users').doc(id2)
           .collection('chats').doc(id1).collection('massage').add({
         'sender':id1,
         'massage':massage,
-        'time':now.hour.toString() + ":" + now.minute.toString(),
+        'time':now.hour.toString() + ":" + now.minute.toString()+':'+now.second.toString(),
       }
       );
+      FirebaseFirestore.instance.collection('Users').doc(id2)
+          .collection('chats').doc(id1).set({
+        'oId':id1,
+      });
       setState(() {
         getMassage();
       });
@@ -142,10 +145,14 @@ class _ChatState extends State<Chat> {
     await SharedPreferences.getInstance().then((value) async {
       id1 = value.getString('userID');
       final snapshot= await FirebaseFirestore.instance.collection('Users').doc(id1).collection('chats').doc(id2).collection('massage').get();
-      print(snapshot.docs);
       massages=snapshot.docs.map((doc) => doc.data()).toList();
       chack=true;
       setState(() {
+        massages.sort((l1,l2){
+          var r = l1["time"].compareTo(l2["time"]);
+          if (r != 0) return r;
+          return l1["time"].compareTo(l2["time"]);
+        });
       });});
   }
 
@@ -156,13 +163,16 @@ class _ChatState extends State<Chat> {
         child: Align(
           alignment: Alignment.bottomRight,
           child: Container(
-            width: MediaQuery.of(context).size.width*0.75,
+            width: MediaQuery.of(context).size.width*0.65,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
                     Align(alignment: Alignment.topLeft,
-                        child: Text(massages[index]['massage'])),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(massages[index]['massage']),
+                        )),
                     Align(alignment: Alignment.bottomRight,
                         child: Text(massages[index]['time'])),
                   ],
@@ -219,7 +229,7 @@ error(context){
 }
 transferPoints(context){
   return SimpleDialog(
-    title: Text('Edit product info',style: TextStyle(color: Colors.green[400]),),
+    title: Text('Transfer Points',style: TextStyle(color: Colors.green[400]),),
     children: [
       SimpleDialogItem(
         text: 'Points',
@@ -276,13 +286,11 @@ transferPoints(context){
     ],
   );
 }
-
 }
 class SimpleDialogItem extends StatelessWidget {
   const SimpleDialogItem(
       {Key key, this.icon, this.color, this.text, this.onPressed, this.child, this.size})
       : super(key: key);
-
   final IconData icon;
   final Color color;
   final String text;

@@ -11,23 +11,24 @@ class ContactUsPage extends StatelessWidget{
         bottomNavigationBar: ContactUsBottomAppBar(
           companyName: 'GOSHARE',
           textColor: Colors.white,
-          backgroundColor: Colors.teal.shade300,
+          backgroundColor: Colors.green[300],
           email: 'goshare@gmail.com',
-          // textFont: 'Sail',
+           textFont: 'QuickSand',
         ),
 
-        backgroundColor: Colors.teal,
+        backgroundColor: Colors.grey[100],
         body: ContactUs(
             cardColor: Colors.white,
-            textColor: Colors.teal.shade900,
+            textColor: Colors.green[200],
             email: 'goshare@gmail.com',
             companyName: 'GoShare',
-            companyColor: Colors.teal.shade100,
+            companyFont: 'QuickSand',
+            companyColor: Colors.green[300],
             phoneNumber: '000000000000',
             tagLine: 'DEVELOPERS',
-            taglineColor: Colors.teal.shade100,
-
-
+            taglineColor: Colors.green[100],
+            textFont: 'QuickSand',
+            dividerColor: Colors.green[300],
       ),
     ));
   }

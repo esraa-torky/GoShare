@@ -81,7 +81,7 @@ class _SellerProfileState extends State<SellerProfile> {
   Container userInfo() {
     return Container(
       alignment: Alignment.topCenter,
-      color: Colors.white,
+      color: Colors.green[100],
       child: Card(
         shape: RoundedRectangleBorder(
           side: BorderSide(color: Colors.white70, width: 1),
@@ -95,11 +95,7 @@ class _SellerProfileState extends State<SellerProfile> {
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Opacity(
-                        opacity: 0.4,
-                        //opening show photo
-                        child: profilePicOptions(),
-                      ),
+                      child: profilePicOptions(),
                     ),
                   ),
                   Padding(
@@ -112,9 +108,7 @@ class _SellerProfileState extends State<SellerProfile> {
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),
                           child: RichText(text: TextSpan(children: [
                             TextSpan(text: seller['user_name'],
-                              style: TextStyle(color: colors[2],
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
+                                style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'QuickSand',color: Colors.green[700],fontSize: 18)
                             ),
                           ]
                           ),),),
@@ -122,7 +116,7 @@ class _SellerProfileState extends State<SellerProfile> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10.0, vertical: 5.0),
                           child: Text(seller['email'],
-                            style: TextStyle(color: colors[2], fontSize: 12,),
+                              style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'QuickSand',color: Colors.green[300])
                           ),
                         ),
                         Padding(
@@ -133,9 +127,7 @@ class _SellerProfileState extends State<SellerProfile> {
                               size: 18,)),
                             TextSpan(text: seller['city'] + " " +
                                 seller['neighbourhood'],
-                                style: TextStyle(color: Colors.blueGrey,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold))
+                                style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'QuickSand',color: Colors.green[300]))
                           ])),
                         )
                       ],
@@ -159,7 +151,8 @@ class _SellerProfileState extends State<SellerProfile> {
       openWithTap: true,
       //NOT DONE YET !!!!
       menuItems: [
-        FocusedMenuItem(title: Text('View profile picture'),
+        FocusedMenuItem(title: Text('View profile picture',
+            style: TextStyle(fontWeight: FontWeight.w700,fontFamily: 'QuickSand',color: Colors.green[800])),
             trailingIcon: Icon(Icons.face, color: colors[2],),
             onPressed: () async {
               await showDialog(
@@ -261,15 +254,14 @@ class _SellerProfileState extends State<SellerProfile> {
                         radius: 20,
                         //ADD A PHOTO HERE!!
 
-                        backgroundImage: //userWhoReview[index]['image'].length != 0?NetworkImage(userWhoReview[index]['image'])
-                        // :
+                        backgroundImage: userWhoReview[index]['image'].length != 0?NetworkImage(userWhoReview[index]['image'])
+                         :
                         NetworkImage(
                             'https://icons-for-free.com/iconfiles/png/512/person-1324760545186718018.png'),),
                       Column(children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text('user name'
-                            // userWhoReview[index]['user_name'].toString()
+                          child: Text(userWhoReview[index]['user_name'].toString()
                             , style: TextStyle(color: Colors.green,
                                 fontWeight: FontWeight.bold),),
                         ),
@@ -310,16 +302,14 @@ class _SellerProfileState extends State<SellerProfile> {
         seller['uid']).collection('reviews').get();
 
     allReviews = snapshot.docs.map((doc) => doc.data()).toList();
-    //userWhoReview=
-    // CollectionReference users = FirebaseFirestore.instance.collection('Users');
-    // userWhoReview.clear();
-    // for (var i in allReviews){
-    //   users.doc(i['reviewerId']).get().then((value) => userWhoReview.add(value));
-    // }
-    // print(userWhoReview);
+    for (int i=0;i<allReviews.length;i++) {
+      final snapshot = await FirebaseFirestore.instance.collection('Users').doc(allReviews[i]['reviewerId']).get();
+      userWhoReview.add(snapshot.data());
+
+    }
     check = true;
     setState(() {
-
+      //initState();
     });
   }
 

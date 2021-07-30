@@ -1,17 +1,13 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_share/Home_page.dart';
 import 'package:go_share/Screens/Login/components/background.dart';
 import 'package:go_share/Screens/Signup/signup_screen.dart';
-import 'package:go_share/Screens/Welcome/welcome_screen.dart';
 import 'package:go_share/components/already_have_an_account_acheck.dart';
 import 'package:go_share/components/rounded_button.dart';
 import 'package:go_share/components/rounded_input_field.dart';
 import 'package:go_share/components/rounded_password_field.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -76,10 +72,8 @@ class _BodyState extends State<Body> {
                   else if(email == null || password == null){
                     ErrorMessage(context).then((onValue) {});
                   }
-
                   }
                 }
-
             ),
             SizedBox(height: size.height * 0.03),
             AlreadyHaveAnAccountCheck(
